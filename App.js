@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SetsScreen from "./src/screens/SetsScreen";
+import SetListScreen from "./src/screens/SetListScreen.js";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -12,7 +12,7 @@ export default function App() {
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
 
-      if (route.name === "SetsScreen") {
+      if (route.name === "SetListScreen") {
         iconName = focused ? "cards" : "cards-outline";
         return (
           <MaterialCommunityIcons name={iconName} size={size} color={color} />
@@ -37,9 +37,9 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Tab.Navigator screenOptions={screenOptions}>
-          <Tab.Screen name="SetsScreen" component={SetsScreen} />
-          <Tab.Screen name="FeedSreen" component={SetsScreen} />
-          <Tab.Screen name="SettingsScreen" component={SetsScreen} />
+          <Tab.Screen name="SetListScreen" component={SetListScreen} />
+          <Tab.Screen name="FeedSreen" component={SetListScreen} />
+          <Tab.Screen name="SettingsScreen" component={SetListScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
