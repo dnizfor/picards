@@ -1,13 +1,26 @@
 import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PlusButton from "../components/global/PlusButton";
+import ChooseMenu from "../components/SetListScreen/ChooseMenu";
+import { useState } from "react";
 
 export default function SetListScreen() {
+  const [isOpen, setIsOpen] = useState(false);
+  const ChooseCardsOptions = [
+    { title: "Add Card", onPress: () => console.log("okk") },
+    { title: "Get Card", onPress: () => console.log("okk") },
+  ];
   return (
     <SafeAreaView style={setListCreenContainer.container}>
       <View style={setListCreenContainer.plusButtonContainer}>
-        <PlusButton />
+        <PlusButton onPress={() => setIsOpen(true)} />
       </View>
+      {isOpen && (
+        <ChooseMenu
+          onPressToBackground={() => setIsOpen(false)}
+          ChooseCardsOptions={ChooseCardsOptions}
+        />
+      )}
     </SafeAreaView>
   );
 }
