@@ -4,7 +4,24 @@ import SetListScreen from "./src/screens/SetListScreen.js";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { createStackNavigator } from "@react-navigation/stack";
+import GetCardScreen from "./src/screens/GetCardScreen.js";
 
+const Stack = createStackNavigator();
+
+function SetListStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Home" component={SetListScreen} />
+      <Stack.Screen name="AddCardScreen" component={GetCardScreen} />
+      <Stack.Screen name="GetCardScreen" component={GetCardScreen} />
+    </Stack.Navigator>
+  );
+}
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -37,7 +54,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Tab.Navigator screenOptions={screenOptions}>
-          <Tab.Screen name="SetListScreen" component={SetListScreen} />
+          <Tab.Screen name="SetListScreen" component={SetListStack} />
           <Tab.Screen name="FeedSreen" component={SetListScreen} />
           <Tab.Screen name="SettingsScreen" component={SetListScreen} />
         </Tab.Navigator>

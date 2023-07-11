@@ -4,11 +4,23 @@ import PlusButton from "../components/global/PlusButton";
 import ChooseMenu from "../components/SetListScreen/ChooseMenu";
 import { useState } from "react";
 
-export default function SetListScreen() {
+export default function SetListScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
   const ChooseCardsOptions = [
-    { title: "Add Card", onPress: () => console.log("okk") },
-    { title: "Get Card", onPress: () => console.log("okk") },
+    {
+      title: "Add Card",
+      onPress: () => {
+        setIsOpen(false);
+        navigation.navigate("AddCardScreen");
+      },
+    },
+    {
+      title: "Get Card",
+      onPress: () => {
+        setIsOpen(false);
+        navigation.navigate("GetCardScreen");
+      },
+    },
   ];
   return (
     <SafeAreaView style={setListCreenContainer.container}>
