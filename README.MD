@@ -1,0 +1,4 @@
+- AYAR EKRANI VE ONBOARDİNG ( SADECE ANA DİL SEÇ)
+- AKIŞ SAYFASI
+- KART SAYFASI VE KART EKLEME
+- [flatlist kaldır bunu ekle ](https://github.com/Flipkart/recyclerlistview)

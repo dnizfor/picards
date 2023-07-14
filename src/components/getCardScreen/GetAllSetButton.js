@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 
-export default function GetAllSetButton() {
+export default function GetAllSetButton({ onPress }) {
   return (
-    <View style={getSetButtonStyle.container}>
+    <TouchableOpacity onPress={onPress} style={getSetButtonStyle.container}>
       <Text style={getSetButtonStyle.title}>Get Cards</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

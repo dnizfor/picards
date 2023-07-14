@@ -6,6 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import GetCardScreen from "./src/screens/GetCardScreen.js";
+import { useEffect } from "react";
+import { initializeDatabase } from "./src/utils/dbController.js";
 
 const Stack = createStackNavigator();
 
@@ -25,6 +27,9 @@ function SetListStack() {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  useEffect(() => {
+    initializeDatabase();
+  }, []);
   const screenOptions = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
