@@ -8,6 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import GetCardScreen from "./src/screens/GetCardScreen.js";
 import { useEffect } from "react";
 import { initializeDatabase } from "./src/utils/dbController.js";
+import AddSetScreen from "./src/screens/AddSetScreen.js";
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ function SetListStack() {
       }}
     >
       <Stack.Screen name="Home" component={SetListScreen} />
-      <Stack.Screen name="AddCardScreen" component={GetCardScreen} />
+      <Stack.Screen name="AddCardScreen" component={AddSetScreen} />
       <Stack.Screen name="GetCardScreen" component={GetCardScreen} />
     </Stack.Navigator>
   );
