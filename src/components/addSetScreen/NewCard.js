@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { Swipeable } from "react-native-gesture-handler";
-
+import { FontAwesome5 } from "@expo/vector-icons";
 export default function NewCard() {
   const renderRightActions = (progress, dragX) => {
     const scale = dragX.interpolate({
@@ -22,7 +22,7 @@ export default function NewCard() {
           <Animated.Text
             style={[newCardStyle.deleteButtonText, { transform: [{ scale }] }]}
           >
-            -
+            <FontAwesome5 name="trash" size={40} color="white" />
           </Animated.Text>
         </View>
       </TouchableOpacity>
@@ -51,6 +51,7 @@ const newCardStyle = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 15,
     paddingLeft: 5,
+    paddingHorizontal: 20,
   },
 
   deleteButton: {

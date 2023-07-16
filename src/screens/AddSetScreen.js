@@ -45,6 +45,7 @@ const addSetScreenStyle = StyleSheet.create({
     fontSize: 15,
     borderBottomColor: "black",
     borderBottomWidth: 1,
+    paddingHorizontal: 20,
   },
   plusButtonContainer: {
     position: "absolute",
