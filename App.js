@@ -12,6 +12,7 @@ import AddSetScreen from "./src/screens/AddSetScreen.js";
 import FeedSreen from "./src/screens/FeedSreen.js";
 import SettingsScreen from "./src/screens/SettingsScreen.js";
 import LanguageSelectScreen from "./src/screens/LanguageSelectScreen.js";
+import OnboardingScreen from "./src/screens/OnboardingScreen.js";
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,7 @@ export default function App() {
     tabBarShowLabel: false,
   });
   // return <LanguageSelectScreen />;
+  // return <OnboardingScreen />;
 
   return (
     <SafeAreaProvider>
