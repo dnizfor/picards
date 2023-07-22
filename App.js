@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { initializeDatabase } from "./src/utils/dbController.js";
 import AddSetScreen from "./src/screens/AddSetScreen.js";
 import FeedSreen from "./src/screens/FeedSreen.js";
+import SettingsScreen from "./src/screens/SettingsScreen.js";
 
 const Stack = createStackNavigator();
 
@@ -63,7 +64,7 @@ export default function App() {
         <Tab.Navigator screenOptions={screenOptions}>
           <Tab.Screen name="SetListScreen" component={SetListStack} />
           <Tab.Screen name="FeedSreen" component={FeedSreen} />
-          <Tab.Screen name="SettingsScreen" component={SetListScreen} />
+          <Tab.Screen name="SettingsScreen" component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
