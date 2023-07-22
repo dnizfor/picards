@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PlusButton from "../components/global/PlusButton";
 import { StyleSheet } from "react-native";
 import NewCard from "../components/addSetScreen/NewCard";
+import CheckButton from "../components/global/CheckButton";
 
 export default function AddSetScreen() {
   const [text, onChangeText] = useState("");
@@ -19,6 +20,9 @@ export default function AddSetScreen() {
       />
       <View style={addSetScreenStyle.plusButtonContainer}>
         <PlusButton />
+      </View>
+      <View style={addSetScreenStyle.checkButtonContainer}>
+        <CheckButton />
       </View>
       <View style={addSetScreenStyle.titleContainer}>
         <Text style={addSetScreenStyle.title}>Cards:</Text>
@@ -51,6 +55,11 @@ const addSetScreenStyle = StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: 20,
+  },
+  checkButtonContainer: {
+    position: "absolute",
+    right: 20,
+    bottom: 80,
   },
   titleContainer: {
     alignItems: "flex-start",
