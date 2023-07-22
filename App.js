@@ -58,6 +58,7 @@ export default function App() {
     tabBarInactiveTintColor: "gray",
     headerShown: false,
     tabBarShowLabel: false,
+    tabBarHideOnKeyboard: true,
   });
   // return <LanguageSelectScreen />;
   // return <OnboardingScreen />;
