@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SetCard from "../components/getCardScreen/SetCard";
+import DefaultSetCard from "../components/getCardScreen/DefaultSetCard";
 import { StyleSheet, FlatList, TextInput, Text } from "react-native";
 import SetList from "../assets/jsons/set_list.json";
 import searchSetsByName from "../utils/searchSetsByName";
@@ -29,7 +29,7 @@ export default function GetCardScreen({ navigation }) {
   };
 
   const renderItems = ({ item }) => (
-    <SetCard
+    <DefaultSetCard
       title={item.set_name}
       count={"18-word"}
       onPress={() => onPressToCard(item.set_id)}

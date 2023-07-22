@@ -3,21 +3,31 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native";
 
-export default function SetCard({ onPress, title, count, isSelected }) {
+export default function DefaultSetCard({ onPress, title, count, isSelected }) {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={
-        isSelected ? setCardStyle.selectedContainer : setCardStyle.container
+        isSelected
+          ? defaultSetCardStyle.selectedContainer
+          : defaultSetCardStyle.container
       }
     >
       <Text
-        style={isSelected ? setCardStyle.selectedTitle : setCardStyle.title}
+        style={
+          isSelected
+            ? defaultSetCardStyle.selectedTitle
+            : defaultSetCardStyle.title
+        }
       >
         {title}
       </Text>
       <Text
-        style={isSelected ? setCardStyle.selectedCount : setCardStyle.count}
+        style={
+          isSelected
+            ? defaultSetCardStyle.selectedCount
+            : defaultSetCardStyle.count
+        }
       >
         {count}
       </Text>
@@ -25,7 +35,7 @@ export default function SetCard({ onPress, title, count, isSelected }) {
   );
 }
 
-const setCardStyle = StyleSheet.create({
+const defaultSetCardStyle = StyleSheet.create({
   container: {
     width: 300,
     height: 100,

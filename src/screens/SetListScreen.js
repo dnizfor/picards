@@ -3,8 +3,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PlusButton from "../components/global/PlusButton";
 import ChooseMenu from "../components/SetListScreen/ChooseMenu";
 import { useState } from "react";
-import SetCard from "../components/getCardScreen/SetCard";
 import { FlatList } from "react-native";
+import SetCard from "../components/SetListScreen/SetCard";
 
 export default function SetListScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
