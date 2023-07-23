@@ -6,13 +6,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import GetCardScreen from "./src/screens/GetCardScreen.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { initializeDatabase } from "./src/utils/dbController.js";
 import AddSetScreen from "./src/screens/AddSetScreen.js";
 import FeedSreen from "./src/screens/FeedSreen.js";
 import SettingsScreen from "./src/screens/SettingsScreen.js";
 import LanguageSelectScreen from "./src/screens/LanguageSelectScreen.js";
 import OnboardingScreen from "./src/screens/OnboardingScreen.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator();
 
@@ -32,8 +33,17 @@ function SetListStack() {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [nativeIsSelected, setNativeIsSelected] = useState(false);
+  const [isFirst, setIsFirst] = useState(false);
   useEffect(() => {
     initializeDatabase();
+    AsyncStorage.getItem("nativeLanguage").then((res) =>
+      res ? setNativeIsSelected(true) : setNativeIsSelected(false)
+    );
+
+    AsyncStorage.getItem("isFirst").then((res) =>
+      res ? setIsFirst(false) : setIsFirst(true)
+    );
   }, []);
   const screenOptions = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
@@ -60,18 +70,32 @@ export default function App() {
     tabBarShowLabel: false,
     tabBarHideOnKeyboard: true,
   });
-  // return <LanguageSelectScreen />;
-  // return <OnboardingScreen />;
 
-  return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <Tab.Navigator screenOptions={screenOptions}>
-          <Tab.Screen name="SetListScreen" component={SetListStack} />
-          <Tab.Screen name="FeedSreen" component={FeedSreen} />
-          <Tab.Screen name="SettingsScreen" component={SettingsScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
-  );
+  const onboardingOnPass = () => {
+    setIsFirst((prev) => !prev);
+    AsyncStorage.setItem("isFirst", "it is not first");
+  };
+  if (!nativeIsSelected) {
+    return (
+      <LanguageSelectScreen
+        onPress={() => setNativeIsSelected((prev) => !prev)}
+      />
+    );
+  } else if (isFirst)
+    return (
+      <OnboardingScreen onDone={onboardingOnPass} onSkip={onboardingOnPass} />
+    );
+  else {
+    return (
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Tab.Navigator screenOptions={screenOptions}>
+            <Tab.Screen name="SetListScreen" component={SetListStack} />
+            <Tab.Screen name="FeedSreen" component={FeedSreen} />
+            <Tab.Screen name="SettingsScreen" component={SettingsScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    );
+  }
 }
