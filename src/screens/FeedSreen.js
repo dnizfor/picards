@@ -2,13 +2,15 @@ import { View, Text, FlatList, StyleSheet, Dimensions } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FlashCard from "../components/feedScreen/FlashCard";
+import VidoCard from "./VidoCard";
 
 export default function FeedSreen() {
   const array = [1, 2, 3];
   const renderItem = ({ item, index }) => {
     return (
       <View style={feedScreenStyle.postContainer}>
-        <FlashCard word={item} mean={"itemitem"} />
+        {/* <FlashCard word={item} mean={"itemitem"} /> */}
+        <VidoCard />
       </View>
     );
   };
