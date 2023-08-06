@@ -1,4 +1,4 @@
-- AYAR EKRANI VE ONBOARDİNG ( SADECE ANA DİL SEÇ)
-- AKIŞ SAYFASI
-- KART SAYFASI VE KART EKLEME
+- AKIŞ SAYFASI - soru kaldı
 - [flatlist kaldır bunu ekle ](https://github.com/Flipkart/recyclerlistview)
+- bağlantıları
+- [drawer](https://www.youtube.com/watch?v=l8nY4Alk70Q)
