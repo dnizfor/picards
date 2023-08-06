@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 
 const SurveyItem = ({ item, onPress, backgroundColor, textColor }) => (
