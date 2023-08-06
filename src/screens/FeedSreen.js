@@ -2,7 +2,7 @@ import { View, Text, FlatList, StyleSheet, Dimensions } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FlashCard from "../components/feedScreen/FlashCard";
-import VidoCard from "./VidoCard";
+import VidoCard from "../components/feedScreen/VidoCard";
 
 export default function FeedSreen() {
   const array = [1, 2, 3];
