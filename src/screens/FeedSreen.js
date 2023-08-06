@@ -3,6 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FlashCard from "../components/feedScreen/FlashCard";
 import VidoCard from "../components/feedScreen/VidoCard";
+import SurveyCard from "../components/feedScreen/surveyCard/SurveyCard";
 
 export default function FeedSreen() {
   const array = [1, 2, 3];
@@ -10,7 +11,8 @@ export default function FeedSreen() {
     return (
       <View style={feedScreenStyle.postContainer}>
         {/* <FlashCard word={item} mean={"itemitem"} /> */}
-        <VidoCard />
+        {/* <VidoCard /> */}
+        <SurveyCard />
       </View>
     );
   };
@@ -30,6 +32,5 @@ const feedScreenStyle = StyleSheet.create({
   postContainer: {
     flex: 1,
     height: Dimensions.get("screen").height - 180,
-    backgroundColor: "blue",
   },
 });
