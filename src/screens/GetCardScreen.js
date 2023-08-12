@@ -17,14 +17,11 @@ export default function GetCardScreen({ navigation }) {
   const [data, setData] = useState([]);
   const [choosedList, setChoosedList] = useState([]);
   const onPressToCard = (id) => {
-    let newChoosedList = choosedList;
     if (choosedList.includes(id)) {
-      const index = newChoosedList.indexOf(id);
-      newChoosedList.splice(index, 1);
+      const newChoosedList = choosedList.filter((item) => item !== id);
       setChoosedList(newChoosedList);
     } else {
-      newChoosedList.push(id);
-      setChoosedList(newChoosedList);
+      setChoosedList((prev) => [...prev, id]);
     }
   };
 
@@ -77,7 +74,7 @@ export default function GetCardScreen({ navigation }) {
       }
     }
 
-    navigation.navigate("Home");
+    navigation.navigate("DeckListScreen");
   };
 
   return (
