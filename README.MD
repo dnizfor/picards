@@ -1,3 +1,4 @@
 - [flatlist kaldır bunu ekle ](https://github.com/Flipkart/recyclerlistview)
 - bağlantıları
 - [drawer](https://www.youtube.com/watch?v=l8nY4Alk70Q)
+- kelime setleri yerien kelime destesi kullan (deck)
