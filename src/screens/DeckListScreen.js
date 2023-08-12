@@ -1,12 +1,12 @@
 import { View, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PlusButton from "../components/global/PlusButton";
-import ChooseMenu from "../components/SetListScreen/ChooseMenu";
+import ChooseMenu from "../components/deckListScreen/ChooseMenu";
 import { useState } from "react";
 import { FlatList } from "react-native";
-import SetCard from "../components/SetListScreen/SetCard";
+import SetCard from "../components/deckListScreen/SetCard";
 
-export default function SetListScreen({ navigation }) {
+export default function DeckListScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
   const ChooseCardsOptions = [
     {
@@ -28,7 +28,7 @@ export default function SetListScreen({ navigation }) {
   const renderItems = ({ item }) => (
     <SetCard title={item.set_name} count={"18-word"} />
   );
-  const data = [{ set_name: "set_name", set_id: 1 }];
+  const data = [{ set_name: "deck_name", set_id: 1 }];
   return (
     <SafeAreaView style={setListCreenContainer.container}>
       <View style={setListCreenContainer.plusButtonContainer}>
@@ -38,7 +38,7 @@ export default function SetListScreen({ navigation }) {
         style={setListCreenContainer.inputContainer}
         // onChangeText={onChangeText}
         // value={text}
-        placeholder="Find Set"
+        placeholder="Find Deck"
       />
       <FlatList
         data={data}
@@ -77,5 +77,6 @@ const setListCreenContainer = StyleSheet.create({
     fontSize: 15,
     borderBottomColor: "black",
     borderBottomWidth: 1,
+    marginTop: 15,
   },
 });

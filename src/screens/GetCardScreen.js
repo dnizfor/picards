@@ -86,7 +86,7 @@ export default function GetCardScreen({ navigation }) {
         style={setCardScreenStyle.inputContainer}
         onChangeText={onChangeText}
         value={text}
-        placeholder="Find Set"
+        placeholder="Find Deck"
       />
       <GetAllSetButton onPress={getCards} />
 

@@ -5,7 +5,7 @@ import { initializeDatabase } from "./src/utils/dbController.js";
 import LanguageSelectScreen from "./src/screens/LanguageSelectScreen.js";
 import OnboardingScreen from "./src/screens/OnboardingScreen.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import TabRoutes from "./src/routes/TabRoutes.js";
+import TabNavigator from "./src/routes/TabNavigator.js";
 
 export default function App() {
   const [nativeIsSelected, setNativeIsSelected] = useState(false);
@@ -38,7 +38,7 @@ export default function App() {
   else {
     return (
       <SafeAreaProvider>
-        <TabRoutes />
+        <TabNavigator />
       </SafeAreaProvider>
     );
   }

@@ -4,35 +4,35 @@ import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PlusButton from "../components/global/PlusButton";
 import { StyleSheet } from "react-native";
-import NewCard from "../components/addSetScreen/NewCard";
+import NewCard from "../components/addDeckScreen/NewCard";
 import CheckButton from "../components/global/CheckButton";
 
-export default function AddSetScreen() {
+export default function AddDeckScreen() {
   const [text, onChangeText] = useState("");
 
   return (
-    <SafeAreaView style={addSetScreenStyle.container}>
+    <SafeAreaView style={addDeckScreenStyle.container}>
       <TextInput
         onChangeText={onChangeText}
         value={text}
-        style={addSetScreenStyle.textInput}
+        style={addDeckScreenStyle.textInput}
         placeholder="Set Name"
       />
-      <View style={addSetScreenStyle.plusButtonContainer}>
+      <View style={addDeckScreenStyle.plusButtonContainer}>
         <PlusButton />
       </View>
-      <View style={addSetScreenStyle.checkButtonContainer}>
+      <View style={addDeckScreenStyle.checkButtonContainer}>
         <CheckButton />
       </View>
-      <View style={addSetScreenStyle.titleContainer}>
-        <Text style={addSetScreenStyle.title}>Cards:</Text>
+      <View style={addDeckScreenStyle.titleContainer}>
+        <Text style={addDeckScreenStyle.title}>Cards:</Text>
       </View>
       <NewCard />
     </SafeAreaView>
   );
 }
 
-const addSetScreenStyle = StyleSheet.create({
+const addDeckScreenStyle = StyleSheet.create({
   container: {
     position: "relative",
     flex: 1,

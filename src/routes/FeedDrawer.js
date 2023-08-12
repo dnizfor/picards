@@ -14,7 +14,7 @@ export default function FeedDrawer() {
       }}
       drawerContent={FeedDraverContent}
     >
-      <Drawer.Screen name="Feed" component={FeedSreen} />
+      <Drawer.Screen name="FeedScreen" component={FeedSreen} />
     </Drawer.Navigator>
   );
 }

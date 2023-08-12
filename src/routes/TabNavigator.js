@@ -4,17 +4,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "../screens/SettingsScreen";
-import SetListStack from "./SetListStack";
+import DeckListStack from "./DeckListStack";
 import FeedDrawer from "./FeedDrawer";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabRoutes() {
+export default function TabNavigator() {
   const screenOptions = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
 
-      if (route.name === "SetListScreen") {
+      if (route.name === "DeckListStack") {
         iconName = focused ? "cards" : "cards-outline";
         return (
           <MaterialCommunityIcons name={iconName} size={size} color={color} />
@@ -22,7 +22,7 @@ export default function TabRoutes() {
       } else if (route.name === "SettingsScreen") {
         iconName = focused ? "settings-sharp" : "settings-outline";
         return <Ionicons name={iconName} size={size} color={color} />;
-      } else if (route.name === "FeedSreen") {
+      } else if (route.name === "FeedDrawer") {
         iconName = focused ? "compass" : "compass-outline";
         return <Ionicons name={iconName} size={size} color={color} />;
       }
@@ -39,8 +39,8 @@ export default function TabRoutes() {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen name="SetListScreen" component={SetListStack} />
-        <Tab.Screen name="FeedSreen" component={FeedDrawer} />
+        <Tab.Screen name="DeckListStack" component={DeckListStack} />
+        <Tab.Screen name="FeedDrawer" component={FeedDrawer} />
         <Tab.Screen name="SettingsScreen" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
