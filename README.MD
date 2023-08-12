@@ -2,3 +2,10 @@
 - bağlantıları
 - [drawer](https://www.youtube.com/watch?v=l8nY4Alk70Q)
 - kelime setleri yerien kelime destesi kullan (deck)
+
+- modlar
+  - learn - vidocard ile takrar
+  - flashcard - flaschkart ile takrar
+  - translate - dinlenen ve koyu renkli kelimenin anlamını seç
+  - listening - dinleneni seç (ingilizce)
+  - writing - boşluk doldurma (dinlenen ve boş olanı seç)
