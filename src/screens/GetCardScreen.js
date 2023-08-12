@@ -85,7 +85,7 @@ export default function GetCardScreen({ navigation }) {
         value={text}
         placeholder="Find Deck"
       />
-      <GetAllSetButton onPress={getCards} />
+      {choosedList.length > 0 && <GetAllSetButton onPress={getCards} />}
 
       <FlatList
         data={data}
