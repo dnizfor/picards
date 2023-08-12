@@ -58,7 +58,7 @@ export default function DeckListScreen({ navigation }) {
 const setListCreenContainer = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "yellow",
+    backgroundColor: "#EFEFEF",
     position: "relative",
     alignItems: "center",
   },
