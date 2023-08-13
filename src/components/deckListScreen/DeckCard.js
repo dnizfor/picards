@@ -9,7 +9,7 @@ import React from "react";
 import { Swipeable } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function SetCard({ onPress, title, count }) {
+export default function DeckCard({ onPress, title, count }) {
   const renderRightActions = (progress, dragX) => {
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
@@ -20,11 +20,11 @@ export default function SetCard({ onPress, title, count }) {
     return (
       <TouchableOpacity
         onPress={() => console.log("delete")}
-        style={setCardStyle.swipeableContainer}
+        style={deckCardStyle.swipeableContainer}
       >
-        <View style={setCardStyle.deleteButton}>
+        <View style={deckCardStyle.deleteButton}>
           <Animated.Text
-            style={[setCardStyle.deleteButtonText, { transform: [{ scale }] }]}
+            style={[deckCardStyle.deleteButtonText, { transform: [{ scale }] }]}
           >
             <FontAwesome5 name="trash" size={40} color="white" />
           </Animated.Text>
@@ -35,15 +35,15 @@ export default function SetCard({ onPress, title, count }) {
 
   return (
     <Swipeable renderRightActions={renderRightActions}>
-      <TouchableOpacity onPress={onPress} style={setCardStyle.container}>
-        <Text style={setCardStyle.title}>{title}</Text>
-        <Text style={setCardStyle.count}>{count}</Text>
+      <TouchableOpacity onPress={onPress} style={deckCardStyle.container}>
+        <Text style={deckCardStyle.title}>{title}</Text>
+        <Text style={deckCardStyle.count}>{count}</Text>
       </TouchableOpacity>
     </Swipeable>
   );
 }
 
-const setCardStyle = StyleSheet.create({
+const deckCardStyle = StyleSheet.create({
   container: {
     width: 300,
     height: 100,

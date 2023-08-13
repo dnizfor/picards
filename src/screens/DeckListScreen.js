@@ -2,12 +2,38 @@ import { View, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PlusButton from "../components/global/PlusButton";
 import ChooseMenu from "../components/deckListScreen/ChooseMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import SetCard from "../components/deckListScreen/SetCard";
-
+import DeckCard from "../components/deckListScreen/DeckCard";
+import { selectData } from "../utils/dbController";
+import searchDecksByName from "../utils/searchDecksByName";
 export default function DeckListScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState([]);
+  const [text, setText] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  useEffect(() => {
+    const columnsToSelect = ["id", "deck_name", "url"]; // İsteğe bağlı olarak seçilecek sütunları belirtin
+    const selectionCondition = "1"; // Tüm verileri almak için boş bir koşul kullanabilirsiniz
+
+    selectData("deck_list", columnsToSelect, selectionCondition)
+      .then((result) => {
+        // Veriler başarıyla seçildi, işlemler burada yapılabilir
+        console.log("Seçilen veriler:", result);
+        setData(result.rows._array);
+        setFilteredData(result.rows._array);
+      })
+      .catch((error) => {
+        // Hata durumunda işlemler burada yapılabilir
+        console.log("Veri seçme hatası:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const newData = searchDecksByName(text, data);
+    setFilteredData(newData);
+  }, [text]);
+
   const ChooseCardsOptions = [
     {
       title: "Add Card",
@@ -25,10 +51,10 @@ export default function DeckListScreen({ navigation }) {
     },
   ];
 
-  const renderItems = ({ item }) => (
-    <SetCard title={item.set_name} count={"18-word"} />
-  );
-  const data = [{ set_name: "deck_name", set_id: 1 }];
+  const renderItems = ({ item }) => {
+    return <DeckCard title={item.deck_name} count={`${count}-card`} />;
+  };
+
   return (
     <SafeAreaView style={setListCreenContainer.container}>
       <View style={setListCreenContainer.plusButtonContainer}>
@@ -36,12 +62,12 @@ export default function DeckListScreen({ navigation }) {
       </View>
       <TextInput
         style={setListCreenContainer.inputContainer}
-        // onChangeText={onChangeText}
-        // value={text}
+        onChangeText={setText}
+        value={text}
         placeholder="Find Deck"
       />
       <FlatList
-        data={data}
+        data={filteredData}
         renderItem={renderItems}
         showsVerticalScrollIndicator={false}
       />

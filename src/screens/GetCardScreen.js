@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DefaultSetCard from "../components/getCardScreen/DefaultSetCard";
+import DefaultDeckCard from "../components/getCardScreen/DefaultDeckCard";
 import { StyleSheet, FlatList, TextInput, Text } from "react-native";
-import SetList from "../assets/jsons/set_list.json";
-import searchSetsByName from "../utils/searchSetsByName";
-import GetAllSetButton from "../components/getCardScreen/GetAllSetButton";
+import DeckList from "../assets/jsons/deck_list.json";
+import searchDecksByName from "../utils/searchDecksByName";
+import GetAllDecksButton from "../components/getCardScreen/GetAllDecksButton";
 import {
   getSetDataById,
   getWordsBySetId,
@@ -13,7 +13,7 @@ import {
 import { insertData } from "../utils/dbController";
 
 export default function GetCardScreen({ navigation }) {
-  const [text, onChangeText] = useState("");
+  const [text, setText] = useState("");
   const [data, setData] = useState([]);
   const [choosedList, setChoosedList] = useState([]);
   const onPressToCard = (id) => {
@@ -26,18 +26,18 @@ export default function GetCardScreen({ navigation }) {
   };
 
   const renderItems = ({ item }) => (
-    <DefaultSetCard
-      title={item.set_name}
+    <DefaultDeckCard
+      title={item.deck_name}
       count={"18-word"}
-      onPress={() => onPressToCard(item.set_id)}
-      isSelected={choosedList.includes(item.set_id)}
+      onPress={() => onPressToCard(item.deck_id)}
+      isSelected={choosedList.includes(item.deck_id)}
     />
   );
   useEffect(() => {
-    setData(SetList);
+    setData(DeckList);
   }, []);
   useEffect(() => {
-    const newData = searchSetsByName(text, SetList);
+    const newData = searchDecksByName(text, DeckList);
     setData(newData);
   }, [text]);
   const getCards = async () => {
@@ -46,8 +46,8 @@ export default function GetCardScreen({ navigation }) {
         const choosed_set_id = choosedList[index];
         const dataOfSet = getSetDataById(choosed_set_id);
 
-        const setListResult = await insertData("set_list", dataOfSet);
-        const newSetId = setListResult.set_id;
+        const DeckListResult = await insertData("deck_list", dataOfSet);
+        const newSetId = DeckListResult.set_id;
 
         const allVocabularyOfSet = getWordsBySetId(choosed_set_id);
 
@@ -81,11 +81,11 @@ export default function GetCardScreen({ navigation }) {
     <SafeAreaView style={setCardScreenStyle.container}>
       <TextInput
         style={setCardScreenStyle.inputContainer}
-        onChangeText={onChangeText}
+        onChangeText={setText}
         value={text}
         placeholder="Find Deck"
       />
-      {choosedList.length > 0 && <GetAllSetButton onPress={getCards} />}
+      {choosedList.length > 0 && <GetAllDecksButton onPress={getCards} />}
 
       <FlatList
         data={data}

@@ -1,15 +1,15 @@
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 
-export default function GetAllSetButton({ onPress }) {
+export default function GetAllDecksButton({ onPress }) {
   return (
-    <TouchableOpacity onPress={onPress} style={getSetButtonStyle.container}>
-      <Text style={getSetButtonStyle.title}>Get Cards</Text>
+    <TouchableOpacity onPress={onPress} style={getDecksButtonStyle.container}>
+      <Text style={getDecksButtonStyle.title}>Get Cards</Text>
     </TouchableOpacity>
   );
 }
 
-const getSetButtonStyle = StyleSheet.create({
+const getDecksButtonStyle = StyleSheet.create({
   container: {
     position: "absolute",
     bottom: 70,

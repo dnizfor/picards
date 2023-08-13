@@ -5,10 +5,10 @@ const db = SQLite.openDatabase("dbName");
 const createTable = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      `CREATE TABLE IF NOT EXISTS set_list (
+      `CREATE TABLE IF NOT EXISTS deck_list (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          set_id INTEGER,
-          set_name TEXT,
+          deck_id INTEGER,
+          deck_name TEXT,
           url TEXT
         );`,
       [],
@@ -43,7 +43,7 @@ const createTable = () => {
       `CREATE TABLE IF NOT EXISTS vocabulary_list (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         mean TEXT,
-        set_id INTEGER,
+        deck_id INTEGER,
         word_id INTEGER,
         word_name TEXT
       );`,
@@ -127,6 +127,44 @@ export const updateData = (tableName, newData, condition) => {
       },
       (error) => {
         console.log("Veri güncelleme hatası:", error);
+      }
+    );
+  });
+};
+
+export const selectData = (tableName, columns, condition) => {
+  return new Promise((resolve, reject) => {
+    const columnNames = columns.join(", ");
+
+    db.transaction((tx) => {
+      tx.executeSql(
+        `SELECT ${columnNames} FROM ${tableName} WHERE ${condition};`,
+        [],
+        (_, result) => {
+          console.log("Veri seçildi:", result);
+          resolve(result); // İşlem başarılı olduğunda resolve ile result değerini döndür
+        },
+        (error) => {
+          console.log("Veri seçme hatası:", error);
+          reject(error); // Hata durumunda reject ile error değerini döndür
+        }
+      );
+    });
+  });
+};
+
+export const countTableRows = (tableName, deck_id, callback) => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      `SELECT COUNT(*) as count FROM ${tableName} WHERE deck_id = ${deck_id};`,
+      [],
+      (_, result) => {
+        const rowCount = result.rows.item(0).count;
+        callback(rowCount);
+      },
+      (error) => {
+        console.log("Error counting rows:", error);
+        callback(null);
       }
     );
   });
