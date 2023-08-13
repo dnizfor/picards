@@ -152,20 +152,3 @@ export const selectData = (tableName, columns, condition) => {
     });
   });
 };
-
-export const countTableRows = (tableName, deck_id, callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      `SELECT COUNT(*) as count FROM ${tableName} WHERE deck_id = ${deck_id};`,
-      [],
-      (_, result) => {
-        const rowCount = result.rows.item(0).count;
-        callback(rowCount);
-      },
-      (error) => {
-        console.log("Error counting rows:", error);
-        callback(null);
-      }
-    );
-  });
-};

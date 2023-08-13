@@ -27,6 +27,7 @@ export default function DeckListScreen({ navigation }) {
         // Hata durumunda işlemler burada yapılabilir
         console.log("Veri seçme hatası:", error);
       });
+    console.log("okk");
   }, []);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ export default function DeckListScreen({ navigation }) {
   ];
 
   const renderItems = ({ item }) => {
-    return <DeckCard title={item.deck_name} count={`${count}-card`} />;
+    return <DeckCard title={item.deck_name} subtitle={"card-deck"} />;
   };
 
   return (
@@ -92,6 +93,7 @@ const setListCreenContainer = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
+    zIndex: 1,
   },
   inputContainer: {
     backgroundColor: "white",

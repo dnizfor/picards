@@ -28,7 +28,7 @@ export default function GetCardScreen({ navigation }) {
   const renderItems = ({ item }) => (
     <DefaultDeckCard
       title={item.deck_name}
-      count={"18-word"}
+      subtitle={"card-deck"}
       onPress={() => onPressToCard(item.deck_id)}
       isSelected={choosedList.includes(item.deck_id)}
     />

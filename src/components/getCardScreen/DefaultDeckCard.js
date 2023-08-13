@@ -3,7 +3,12 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native";
 
-export default function DefaultDeckCard({ onPress, title, count, isSelected }) {
+export default function DefaultDeckCard({
+  onPress,
+  title,
+  subtitle,
+  isSelected,
+}) {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -25,11 +30,11 @@ export default function DefaultDeckCard({ onPress, title, count, isSelected }) {
       <Text
         style={
           isSelected
-            ? defaultDeckCardStyle.selectedCount
-            : defaultDeckCardStyle.count
+            ? defaultDeckCardStyle.selectedSubtitle
+            : defaultDeckCardStyle.subtitle
         }
       >
-        {count}
+        {subtitle}
       </Text>
     </TouchableOpacity>
   );
@@ -56,6 +61,6 @@ const defaultDeckCardStyle = StyleSheet.create({
   },
   title: { fontSize: 25, fontWeight: "bold" },
   selectedTitle: { fontSize: 25, fontWeight: "bold", color: "white" },
-  count: { fontSize: 15, fontWeight: "bold", color: "grey" },
-  selectedCount: { fontSize: 15, fontWeight: "bold", color: "white" },
+  subtitle: { fontSize: 15, fontWeight: "bold", color: "grey" },
+  selectedSubtitle: { fontSize: 15, fontWeight: "bold", color: "white" },
 });

@@ -9,7 +9,7 @@ import React from "react";
 import { Swipeable } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function DeckCard({ onPress, title, count }) {
+export default function DeckCard({ onPress, title, subtitle }) {
   const renderRightActions = (progress, dragX) => {
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
@@ -37,7 +37,7 @@ export default function DeckCard({ onPress, title, count }) {
     <Swipeable renderRightActions={renderRightActions}>
       <TouchableOpacity onPress={onPress} style={deckCardStyle.container}>
         <Text style={deckCardStyle.title}>{title}</Text>
-        <Text style={deckCardStyle.count}>{count}</Text>
+        <Text style={deckCardStyle.subtitle}>{subtitle}</Text>
       </TouchableOpacity>
     </Swipeable>
   );
@@ -57,7 +57,7 @@ const deckCardStyle = StyleSheet.create({
     justifyContent: "center",
   },
   title: { fontSize: 25, fontWeight: "bold" },
-  count: { fontSize: 15, fontWeight: "bold", color: "grey" },
+  subtitle: { fontSize: 15, fontWeight: "bold", color: "grey" },
   deleteButton: {
     backgroundColor: "red",
     justifyContent: "center",
