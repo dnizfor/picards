@@ -2,31 +2,42 @@ import { View, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PlusButton from "../components/global/PlusButton";
 import ChooseMenu from "../components/deckListScreen/ChooseMenu";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { FlatList } from "react-native";
 import DeckCard from "../components/deckListScreen/DeckCard";
 import { selectData } from "../utils/dbController";
 import searchDecksByName from "../utils/searchDecksByName";
+import { useFocusEffect } from "@react-navigation/native";
+
 export default function DeckListScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
   const [text, setText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  useEffect(() => {
-    const columnsToSelect = ["id", "deck_name", "url"]; // İsteğe bağlı olarak seçilecek sütunları belirtin
-    const selectionCondition = "1"; // Tüm verileri almak için boş bir koşul kullanabilirsiniz
 
-    selectData("deck_list", columnsToSelect, selectionCondition)
-      .then((result) => {
-        // Veriler başarıyla seçildi, işlemler burada yapılabilir
-        console.log("Seçilen veriler:", result);
-        setData(result.rows._array);
-        setFilteredData(result.rows._array);
-      })
-      .catch((error) => {
-        // Hata durumunda işlemler burada yapılabilir
-        console.log("Veri seçme hatası:", error);
-      });
+  useFocusEffect(
+    useCallback(() => {
+      // Burada yapmak istediğiniz işlemleri gerçekleştirin
+      console.log("Sayfa görüntülendi, useEffect gibi işlemler yapılabilir");
+
+      const columnsToSelect = ["id", "deck_name", "url"];
+      const selectionCondition = "1";
+
+      selectData("deck_list", columnsToSelect, selectionCondition)
+        .then((result) => {
+          console.log("Seçilen veriler:", result);
+          setData(result.rows._array);
+          setFilteredData(result.rows._array);
+        })
+        .catch((error) => {
+          console.log("Veri seçme hatası:", error);
+        });
+
+      return () => {};
+    }, [])
+  );
+
+  useEffect(() => {
     console.log("okk");
   }, []);
 
