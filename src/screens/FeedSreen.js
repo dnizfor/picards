@@ -7,12 +7,17 @@ import SurveyCard from "../components/feedScreen/surveyCard/SurveyCard";
 
 export default function FeedSreen() {
   const array = [1, 2, 3];
+
+  const onViewableItemsChanged = ({ viewableItems }) => {
+    console.log("***********Visible items are", viewableItems[0].index);
+  };
+
   const renderItem = ({ item, index }) => {
     return (
       <View style={feedScreenStyle.postContainer}>
         {/* <FlashCard word={item} mean={"itemitem"} /> */}
-        {/* <VidoCard /> */}
-        <SurveyCard />
+        <VidoCard />
+        {/* <SurveyCard /> */}
       </View>
     );
   };
@@ -24,6 +29,10 @@ export default function FeedSreen() {
         pagingEnabled={true}
         keyExtractor={(item) => item}
         decelerationRate={"normal"}
+        viewabilityConfig={{
+          viewAreaCoveragePercentThreshold: 50,
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
       />
     </SafeAreaView>
   );

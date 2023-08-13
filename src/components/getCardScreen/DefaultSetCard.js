@@ -52,7 +52,7 @@ const defaultSetCardStyle = StyleSheet.create({
     marginVertical: 10,
     justifyContent: "center",
     paddingHorizontal: 20,
-    backgroundColor: "green",
+    backgroundColor: "#14A44D",
   },
   title: { fontSize: 25, fontWeight: "bold" },
   selectedTitle: { fontSize: 25, fontWeight: "bold", color: "white" },

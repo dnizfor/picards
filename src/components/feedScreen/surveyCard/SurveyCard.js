@@ -37,6 +37,7 @@ export default function SurveyCard() {
 const surveyCardStyles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#EFEFEF",
   },
   video: {
     alignSelf: "center",

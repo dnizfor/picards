@@ -15,7 +15,7 @@ const getSetButtonStyle = StyleSheet.create({
     bottom: 70,
     width: 300,
     height: 70,
-    backgroundColor: "blue",
+    backgroundColor: "#007bff",
     zIndex: 1,
     borderRadius: 35,
     justifyContent: "center",

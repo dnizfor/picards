@@ -10,31 +10,34 @@ export default function VidoCard() {
 
   return (
     <View style={vidoCardStyle.container}>
-      <View>
+      <View style={vidoCardStyle.titleContainer}>
         <Text style={vidoCardStyle.title}>
           VidoCardVidoCardVidoCardVidoCardVidoCar
         </Text>
       </View>
-      <TouchableOpacity
-        onPress={() =>
-          status.isPlaying
-            ? video.current.pauseAsync()
-            : video.current.playAsync()
-        }
-      >
-        <Video
-          ref={video}
-          style={styles.video}
-          source={{
-            uri: "https://y.yarn.co/50e48925-0d48-4cd2-bdad-3bc7959e3cac.mp4",
-          }}
-          useNativeControls={false}
-          resizeMode={ResizeMode.STRETCH}
-          isLooping
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-        />
-      </TouchableOpacity>
-      <View>
+      <View style={vidoCardStyle.videoContainer}>
+        <TouchableOpacity
+          onPress={() =>
+            status.isPlaying
+              ? video.current.pauseAsync()
+              : video.current.playAsync()
+          }
+        >
+          <Video
+            ref={video}
+            style={styles.video}
+            source={{
+              uri: "https://y.yarn.co/50e48925-0d48-4cd2-bdad-3bc7959e3cac.mp4",
+            }}
+            useNativeControls={false}
+            resizeMode={ResizeMode.STRETCH}
+            isLooping
+            onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={vidoCardStyle.titleContainer}>
         <Text style={vidoCardStyle.title}>VidoCardVidoCard</Text>
       </View>
     </View>
@@ -45,6 +48,15 @@ const vidoCardStyle = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-around",
+  },
+  videoContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  titleContainer: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "center",
   },
 
   title: { fontWeight: "bold", fontSize: 30, textAlign: "center" },

@@ -29,7 +29,7 @@ export default function TabNavigator() {
 
       // You can return any component that you like here!
     },
-    tabBarActiveTintColor: "blue",
+    tabBarActiveTintColor: "#007bff",
     tabBarInactiveTintColor: "gray",
     headerShown: false,
     tabBarShowLabel: false,

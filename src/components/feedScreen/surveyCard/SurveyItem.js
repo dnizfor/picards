@@ -17,6 +17,10 @@ const surveyItenStyles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 20,
+    alignItems: "center",
+    borderColor: "#007bff",
+    borderWidth: 1,
   },
   title: {
     fontSize: 32,

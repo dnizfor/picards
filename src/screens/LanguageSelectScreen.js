@@ -346,7 +346,7 @@ const LanguageSelectScreen = ({ onPress }) => {
       <LanguagePicker
         initialIndex={1}
         languageItemProps={{
-          activeBorderColor: "blue",
+          activeBorderColor: "#007bff",
         }}
         data={data}
         onSelect={onSelect}

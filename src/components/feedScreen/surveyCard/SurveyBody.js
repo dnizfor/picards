@@ -26,7 +26,7 @@ const SurveyBody = () => {
   const [selectedId, setSelectedId] = useState();
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+    const backgroundColor = item.id === selectedId ? "#14A44D" : "white";
     const color = item.id === selectedId ? "white" : "black";
 
     return (
