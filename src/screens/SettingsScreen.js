@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserImage from "../assets/images/user.png";
 import LanguageCard from "../components/settingsScreen/LanguageCard";
@@ -9,11 +9,11 @@ import LanguageSelectScreen from "./LanguageSelectScreen";
 export default function SettingsScreen() {
   const [language, setLanguage] = useState("");
   const [languageSelectIsOpen, setLanguageSelectIsOpen] = useState(false);
-  useState(() => {
+  useEffect(() => {
     AsyncStorage.getItem("nativeLanguage").then((res) =>
       setLanguage(JSON.parse(res).title)
     );
-  }, []);
+  }, [languageSelectIsOpen]);
   if (languageSelectIsOpen)
     return (
       <LanguageSelectScreen onPress={() => setLanguageSelectIsOpen(false)} />
