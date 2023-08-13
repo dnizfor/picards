@@ -33,6 +33,7 @@ const ChooseMenuStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#EFEFEF",
+    zIndex: 2,
   },
   flatListStyle: {
     height: "100%",
