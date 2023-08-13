@@ -1,8 +1,7 @@
 import React from "react";
-import { Dimensions, Text, View } from "react-native";
-import LanguagePicker from "react-native-language-select";
+import { Dimensions, Text, View, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import LanguagePicker from "../components/languageSelectScreen/LanguagePicker";
 const windowWidth = Dimensions.get("window").width;
 
 const data = [
@@ -308,38 +307,11 @@ const LanguageSelectScreen = ({ onPress }) => {
       // saving error
     }
   };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        paddingTop: 50,
-        backgroundColor: "#EFEFEF",
-      }}
-    >
-      <Text
-        style={{
-          textAlign: "center",
-          fontWeight: "600",
-          fontSize: 26,
-          color: "#454A62",
-          marginTop: 32,
-          marginBottom: 30,
-        }}
-      >
-        Language
-      </Text>
-      <Text
-        style={{
-          width: windowWidth * 0.7,
-          textAlign: "center",
-          fontWeight: "500",
-          fontSize: 13,
-          color: "#2F3452",
-          marginBottom: 40,
-        }}
-      >
+    <View style={styles.container}>
+      <Text style={styles.title}>Language</Text>
+      <Text style={styles.subtitle}>
         Please select your native language. We will translate the contents into
         your language so that you can learn English.
       </Text>
@@ -354,5 +326,31 @@ const LanguageSelectScreen = ({ onPress }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 50,
+    backgroundColor: "#EFEFEF",
+  },
+  title: {
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: 26,
+    color: "#454A62",
+    marginTop: 32,
+    marginBottom: 30,
+  },
+  subtitle: {
+    width: windowWidth * 0.7,
+    textAlign: "center",
+    fontWeight: "500",
+    fontSize: 13,
+    color: "#2F3452",
+    marginBottom: 40,
+  },
+});
 
 export default LanguageSelectScreen;

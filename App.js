@@ -25,7 +25,7 @@ export default function App() {
     setIsFirst((prev) => !prev);
     AsyncStorage.setItem("isFirst", "it is not first");
   };
-  if (!nativeIsSelected) {
+  if (!!nativeIsSelected) {
     return (
       <LanguageSelectScreen
         onPress={() => setNativeIsSelected((prev) => !prev)}
