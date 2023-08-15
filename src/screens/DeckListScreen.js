@@ -5,7 +5,7 @@ import ChooseMenu from "../components/deckListScreen/ChooseMenu";
 import { useEffect, useState, useCallback } from "react";
 import { FlatList } from "react-native";
 import DeckCard from "../components/deckListScreen/DeckCard";
-import { selectData } from "../utils/dbController";
+import { deleteData, selectData } from "../utils/dbController";
 import searchDecksByName from "../utils/searchDecksByName";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -14,6 +14,7 @@ export default function DeckListScreen({ navigation }) {
   const [data, setData] = useState([]);
   const [text, setText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [updateData, setUpdateData] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -34,12 +35,8 @@ export default function DeckListScreen({ navigation }) {
         });
 
       return () => {};
-    }, [])
+    }, [updateData])
   );
-
-  useEffect(() => {
-    console.log("okk");
-  }, []);
 
   useEffect(() => {
     const newData = searchDecksByName(text, data);
@@ -62,9 +59,42 @@ export default function DeckListScreen({ navigation }) {
       },
     },
   ];
+  const onDelete = async (deckIdToDelete, callback) => {
+    try {
+      // Veriyi deck_list tablosundan sil
+      await deleteData("deck_list", `id = ${deckIdToDelete}`);
+
+      // vocabulary_list tablosundan deck_id değeri deckIdToDelete olan verileri seç
+      const vocabularyData = await selectData(
+        "vocabulary_list",
+        ["id", "word_id"],
+        `deck_id = ${deckIdToDelete}`
+      );
+      for (const vocabulary of vocabularyData.rows._array) {
+        const wordId = vocabulary.word_id;
+        const vocabularyId = vocabulary.id;
+
+        // video_list tablosundan word_id değeri wordId olan verileri sil
+        await deleteData("video_list", `word_id = ${wordId}`);
+
+        // vocabulary_list tablosundan veriyi sil
+        await deleteData("vocabulary_list", `id = ${vocabularyId}`);
+      }
+      callback();
+      console.log("İşlem başarıyla tamamlandı.");
+    } catch (error) {
+      console.error("Hata:", error);
+    }
+  };
 
   const renderItems = ({ item }) => {
-    return <DeckCard title={item.deck_name} subtitle={"card-deck"} />;
+    return (
+      <DeckCard
+        title={item.deck_name}
+        subtitle={"card-deck"}
+        onDelete={() => onDelete(item.id, () => setUpdateData((prev) => !prev))}
+      />
+    );
   };
 
   return (

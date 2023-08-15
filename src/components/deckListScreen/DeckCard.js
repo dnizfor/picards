@@ -9,7 +9,7 @@ import React from "react";
 import { Swipeable } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function DeckCard({ onPress, title, subtitle }) {
+export default function DeckCard({ onPress, onDelete, title, subtitle }) {
   const renderRightActions = (progress, dragX) => {
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
@@ -19,7 +19,7 @@ export default function DeckCard({ onPress, title, subtitle }) {
 
     return (
       <TouchableOpacity
-        onPress={() => console.log("delete")}
+        onPress={onDelete}
         style={deckCardStyle.swipeableContainer}
       >
         <View style={deckCardStyle.deleteButton}>
