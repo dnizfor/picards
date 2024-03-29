@@ -38,7 +38,10 @@ export default function TabNavigator() {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={screenOptions}>
+      <Tab.Navigator
+        screenOptions={screenOptions}
+        initialRouteName="FeedDrawer"
+      >
         <Tab.Screen name="DeckListStack" component={DeckListStack} />
         <Tab.Screen name="FeedDrawer" component={FeedDrawer} />
         <Tab.Screen name="SettingsScreen" component={SettingsScreen} />
