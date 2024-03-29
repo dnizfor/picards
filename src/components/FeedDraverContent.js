@@ -1,11 +1,11 @@
 import { Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 
 export default function FeedDraverContent(props) {
-  const modList = ["Learn", "Flashcard", "Space", "Listening"];
+  const modList = ["VidoCard", "FlashCard", "Space", "Listening"];
   const [modIndex, setModIndex] = useState(0);
-
+  const setMode = props.setMode;
   const deckList = [
     "set-12",
     "1",
@@ -35,7 +35,10 @@ export default function FeedDraverContent(props) {
       {modList.map((item, index) => (
         <DrawerItem
           label={item}
-          onPress={() => setModIndex(index)}
+          onPress={() => {
+            setModIndex(index);
+            setMode(item);
+          }}
           focused={modList[modIndex] === item}
           key={index}
         />
