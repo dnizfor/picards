@@ -3,7 +3,7 @@ function searchDecksByName(searchTerm, sets) {
 
   for (let i = 0; i < sets.length; i++) {
     const set = sets[i];
-    if (set.deck_name.toLowerCase().includes(searchTerm.toLowerCase())) {
+    if (set.deck.toLowerCase().includes(searchTerm.toLowerCase())) {
       results.push(set);
     }
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "../screens/SettingsScreen";
 import DeckListStack from "./DeckListStack";
 import FeedDrawer from "./FeedDrawer";
+import { useSQLiteContext } from "expo-sqlite";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +36,31 @@ export default function TabNavigator() {
     tabBarShowLabel: false,
     tabBarHideOnKeyboard: true,
   });
+  const db = useSQLiteContext();
 
+useEffect(()=>{
+  async function createDatabase() {
+    try{
+      const result = await db.runAsync(
+        `CREATE TABLE IF NOT EXISTS vocabularyData (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          deck TEXT,
+          word TEXT,
+          mean TEXT,
+          video TEXT,
+          title TEXT,
+          level TEXT
+        );`
+      )
+    }
+    catch(e){
+      console.log(e);
+    }
+  
+
+  }
+  createDatabase();
+},[])
   return (
     <NavigationContainer>
       <Tab.Navigator

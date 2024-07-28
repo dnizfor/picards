@@ -5,6 +5,7 @@ import LanguageSelectScreen from "./src/screens/LanguageSelectScreen.js";
 import OnboardingScreen from "./src/screens/OnboardingScreen.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TabNavigator from "./src/routes/TabNavigator.js";
+import { SQLiteProvider  } from 'expo-sqlite';
 
 export default function App() {
   const [nativeIsSelected, setNativeIsSelected] = useState(false);
@@ -17,6 +18,9 @@ export default function App() {
     AsyncStorage.getItem("isFirst").then((res) =>
       res ? setIsFirst(false) : setIsFirst(true)
     );
+
+ 
+    
   }, []);
 
   const onboardingOnPass = () => {
@@ -36,7 +40,9 @@ export default function App() {
   else {
     return (
       <SafeAreaProvider>
+        <SQLiteProvider databaseName="vocabulary.db" >
         <TabNavigator />
+        </SQLiteProvider>
       </SafeAreaProvider>
     );
   }
