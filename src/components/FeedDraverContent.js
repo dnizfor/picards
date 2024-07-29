@@ -1,25 +1,35 @@
 import { Text, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { useSQLiteContext } from "expo-sqlite";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function FeedDraverContent(props) {
   const modList = ["VidoCard", "FlashCard", "Translate"];
   const [modIndex, setModIndex] = useState(0);
+  const [deckList, setDeckList] = useState([]);
   const setMode = props.setMode;
-  const deckList = [
-    "set-12",
-    "1",
-    "2",
-    "4",
-    "set-12",
-    "5",
-    "Spa6ce",
-    "7",
-    "6-12",
-    "Fla2shcard",
-    "Spac1e",
-    "List3ening",
-  ];
+ 
+  db = useSQLiteContext()
+  useFocusEffect(
+    useCallback(() => {
+      // Burada yapmak istediğiniz işlemleri gerçekleştirin
+      console.log("Sayfa görüntülendi, useEffect gibi işlemler yapılabilir");
+
+      db.getAllAsync(
+        `SELECT DISTINCT deck FROM vocabularyData ;`
+      )
+        .then((result) => {
+          console.log("Seçilen veriler:", result);
+          setDeckList(result);
+        })
+        .catch((error) => {
+          console.log("Veri seçme hatası:", error);
+        });
+
+      return () => {};
+    }, [])
+  );
   const [choosedList, setChoosedList] = useState([]);
   const onChoose = (deckName) => {
     if (choosedList.includes(deckName)) {
@@ -47,7 +57,7 @@ export default function FeedDraverContent(props) {
       <Text style={feedDrawerStyles.title}>Decks</Text>
       {deckList.map((item, index) => (
         <DrawerItem
-          label={item}
+          label={item.deck}
           onPress={() => onChoose(item)}
           focused={choosedList.includes(item)}
           key={index}
