@@ -5,9 +5,9 @@ import ChooseMenu from "../components/deckListScreen/ChooseMenu";
 import { useEffect, useState, useCallback } from "react";
 import { FlatList } from "react-native";
 import DeckCard from "../components/deckListScreen/DeckCard";
-import { deleteData, selectData } from "../utils/dbController";
 import searchDecksByName from "../utils/searchDecksByName";
 import { useFocusEffect } from "@react-navigation/native";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function DeckListScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,20 +15,19 @@ export default function DeckListScreen({ navigation }) {
   const [text, setText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [updateData, setUpdateData] = useState(false);
-
+  db = useSQLiteContext()
   useFocusEffect(
     useCallback(() => {
       // Burada yapmak istediğiniz işlemleri gerçekleştirin
       console.log("Sayfa görüntülendi, useEffect gibi işlemler yapılabilir");
 
-      const columnsToSelect = ["id", "deck_name", "url"];
-      const selectionCondition = "1";
-
-      selectData("deck_list", columnsToSelect, selectionCondition)
+      db.getAllAsync(
+        `SELECT DISTINCT deck FROM vocabularyData ;`
+      )
         .then((result) => {
           console.log("Seçilen veriler:", result);
-          setData(result.rows._array);
-          setFilteredData(result.rows._array);
+          setData(result);
+          setFilteredData(result);
         })
         .catch((error) => {
           console.log("Veri seçme hatası:", error);
@@ -59,40 +58,24 @@ export default function DeckListScreen({ navigation }) {
       },
     },
   ];
-  const onDelete = async (deckIdToDelete, callback) => {
-    try {
-      // Veriyi deck_list tablosundan sil
-      await deleteData("deck_list", `id = ${deckIdToDelete}`);
+  const onDelete = async (deckToDelete, callback) => {
+    try{
+      await db.runAsync('DELETE FROM vocabularyData WHERE deck = $value', { $value: deckToDelete })
+      callback()
 
-      // vocabulary_list tablosundan deck_id değeri deckIdToDelete olan verileri seç
-      const vocabularyData = await selectData(
-        "vocabulary_list",
-        ["id", "word_id"],
-        `deck_id = ${deckIdToDelete}`
-      );
-      for (const vocabulary of vocabularyData.rows._array) {
-        const wordId = vocabulary.word_id;
-        const vocabularyId = vocabulary.id;
-
-        // video_list tablosundan word_id değeri wordId olan verileri sil
-        await deleteData("video_list", `word_id = ${wordId}`);
-
-        // vocabulary_list tablosundan veriyi sil
-        await deleteData("vocabulary_list", `id = ${vocabularyId}`);
-      }
-      callback();
-      console.log("İşlem başarıyla tamamlandı.");
-    } catch (error) {
-      console.error("Hata:", error);
+    }  catch(e){
+      console.log(e);
     }
+
+
   };
 
   const renderItems = ({ item }) => {
     return (
       <DeckCard
-        title={item.deck_name}
+        title={item.deck}
         subtitle={"card-deck"}
-        onDelete={() => onDelete(item.id, () => setUpdateData((prev) => !prev))}
+        onDelete={() => onDelete(item.deck, () => setUpdateData((prev) => !prev))}
       />
     );
   };
