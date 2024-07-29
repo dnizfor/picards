@@ -6,11 +6,9 @@ import DeckList from "../assets/jsons/data.json";
 import searchDecksByName from "../utils/searchDecksByName";
 import GetAllDecksButton from "../components/getCardScreen/GetAllDecksButton";
 import {
-  getSetDataById,
-  getWordsBySetId,
-  getVideosByWordId,
+  getWordsByDeckName,
 } from "../utils/jsonFilter";
-import { insertData } from "../utils/dbController";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function GetCardScreen({ navigation }) {
   const [text, setText] = useState("");
@@ -24,7 +22,7 @@ export default function GetCardScreen({ navigation }) {
       setChoosedList((prev) => [...prev, id]);
     }
   };
-
+  const db = useSQLiteContext();
   const renderItems = ({ item }) => (
     <DefaultDeckCard
       title={item.deck}
@@ -42,15 +40,22 @@ export default function GetCardScreen({ navigation }) {
     const newData = searchDecksByName(text, uniqueDeckObjects);
     setData(newData);
   }, [text]);
-  const getCards = async () => {
+  const getCards =  () => {
     for (let index = 0; index < choosedList.length; index++) {
-      try {
-        const choosed_set_id = choosedList[index];
-        console.log(choosed_set_id);
+        const choosedDeckName = choosedList[index];
+        const wordsOfDeck = getWordsByDeckName(choosedDeckName)
+
+        wordsOfDeck.map((wordData)=>{
+          wordData = {...wordData,level:"starter"}
+            db.runAsync(
+              `INSERT INTO ${"vocabularyData"} (${Object.keys(wordData).join(
+              ", "
+            )}) VALUES (${Object.keys(wordData).fill("?").join(", ")});`,
+            Object.values(wordData),).then(()=>console.log("succesfull"))
+            .catch((e)=>console.log("err",e))
+        })
+
         
-      } catch (e) {
-        console.log("err", e);
-      }
     }
 
     navigation.navigate("DeckListScreen");
