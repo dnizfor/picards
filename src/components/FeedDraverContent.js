@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 
 export default function FeedDraverContent(props) {
-  const modList = ["VidoCard", "FlashCard", "Space", "Listening"];
+  const modList = ["VidoCard", "FlashCard", "Translate"];
   const [modIndex, setModIndex] = useState(0);
   const setMode = props.setMode;
   const deckList = [
