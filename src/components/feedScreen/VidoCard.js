@@ -8,9 +8,8 @@ export default function VidoCard({word,mean,videoUrl,isVisible}) {
   const [status, setStatus] = useState({});
   const video = useRef(null);
  
-useEffect(async()=>{
+useEffect(()=>{
   if(isVisible){
-    await Audio.setAudioModeAsync({ playsInSilentModeIOS: true })
     video.current.playAsync()
   }else{
     video.current.pauseAsync()
