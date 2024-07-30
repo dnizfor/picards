@@ -6,6 +6,7 @@ import VidoCard from "../components/feedScreen/VidoCard";
 import SurveyCard from "../components/feedScreen/surveyCard/SurveyCard";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from "@react-navigation/native";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function FeedSreen({ mode, choosedList ,setDeckList}) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -16,13 +17,14 @@ export default function FeedSreen({ mode, choosedList ,setDeckList}) {
     setVisibleItemId(viewableItems[0]?.item.id)
 
   };
-
+const db = useSQLiteContext()
 useEffect(()=>{
   db.getAllAsync(
     `SELECT DISTINCT deck FROM vocabularyData ;`
   )
     .then((result) => {
       console.log("Seçilen veriler:", result);
+      console.log("feed screen açıldı ",result);
       setDeckList(result);
     })
     .catch((error) => {
