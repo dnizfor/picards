@@ -13,7 +13,7 @@ export default function FeedSreen({ mode, choosedList }) {
   const [visibleItemId, setVisibleItemId] = useState("")
 
   const onViewableItemsChanged = ({ viewableItems }) => {
-    setVisibleItemId(viewableItems[0].item.id)
+    setVisibleItemId(viewableItems[0]?.item.id)
 
   };
 
