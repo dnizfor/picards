@@ -7,7 +7,7 @@ import SurveyCard from "../components/feedScreen/surveyCard/SurveyCard";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function FeedSreen({ mode, choosedList }) {
+export default function FeedSreen({ mode, choosedList ,setDeckList}) {
   const tabBarHeight = useBottomTabBarHeight();
   const [vocabularyData, setVocabularyData] = useState([])
   const [visibleItemId, setVisibleItemId] = useState("")
@@ -17,7 +17,18 @@ export default function FeedSreen({ mode, choosedList }) {
 
   };
 
-
+useEffect(()=>{
+  db.getAllAsync(
+    `SELECT DISTINCT deck FROM vocabularyData ;`
+  )
+    .then((result) => {
+      console.log("Seçilen veriler:", result);
+      setDeckList(result);
+    })
+    .catch((error) => {
+      console.log("Veri seçme hatası:", error);
+    });
+},[])
 
   useFocusEffect(
     useCallback(() => {
@@ -48,6 +59,8 @@ export default function FeedSreen({ mode, choosedList }) {
         .catch((error) => {
           console.log("Veri seçme hatası:", error, choosedList,);
         });
+
+     
 
       return () => { };
     }, [choosedList])
