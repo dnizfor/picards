@@ -1,13 +1,13 @@
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 
-const SurveyItem = ({ item, onPress, backgroundColor, textColor }) => (
+const SurveyItem = ({ title, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity
     onPress={onPress}
     style={[surveyItenStyles.item, { backgroundColor }]}
   >
     <Text style={[surveyItenStyles.title, { color: textColor }]}>
-      {item.title}
+      {title}
     </Text>
   </TouchableOpacity>
 );

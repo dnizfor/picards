@@ -304,7 +304,7 @@ const LanguageSelectScreen = ({ onPress }) => {
       await AsyncStorage.setItem("nativeLanguage", jsonValue);
       onPress();
     } catch (e) {
-      // saving error
+      console.log(e)
     }
   };
 

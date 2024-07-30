@@ -8,16 +8,19 @@ const Drawer = createDrawerNavigator();
 
 export default function FeedDrawer() {
   const [mode, setMode] = useState("VidoCard");
+  const [choosedList, setChoosedList] = useState([]);
+
+  
 
   return (
     <Drawer.Navigator
       screenOptions={{
         headerShown: false,
       }}
-      drawerContent={() => <FeedDraverContent setMode={setMode} />}
+      drawerContent={() => <FeedDraverContent setMode={setMode}  choosedList={choosedList} setChoosedList={setChoosedList} />}
     >
       <Drawer.Screen name="FeedScreen">
-        {(props) => <FeedSreen {...props} mode={mode} />}
+        {(props) => <FeedSreen {...props} mode={mode} choosedList={choosedList} />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );

@@ -1,11 +1,27 @@
 import { View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Video, ResizeMode } from "expo-av";
 import SurveyBody from "./SurveyBody";
-export default function SurveyCard() {
-  const [status, setStatus] = useState({});
-  const video = useRef(null);
+import { generateOptions } from "../../../utils/optionsCreator";
 
+export default function SurveyCard({videoUrl,mean,isVisible}) {
+  const [status, setStatus] = useState({});
+  const [options, setOptions] = useState({});
+  const video = useRef(null);
+  useEffect(()=>{
+    if(isVisible){
+      video.current.playAsync()
+    }else{
+      video.current.pauseAsync()
+    }
+  
+  },[isVisible])
+  useEffect(()=>{
+    const options =(generateOptions(mean))
+    setOptions(options)
+    
+  },[])
+  
   return (
     <View style={surveyCardStyles.container}>
       <TouchableOpacity
@@ -19,7 +35,7 @@ export default function SurveyCard() {
           ref={video}
           style={surveyCardStyles.video}
           source={{
-            uri: "https://y.yarn.co/50e48925-0d48-4cd2-bdad-3bc7959e3cac.mp4",
+            uri: videoUrl,
           }}
           useNativeControls={false}
           resizeMode={ResizeMode.STRETCH}
@@ -29,7 +45,7 @@ export default function SurveyCard() {
       </TouchableOpacity>
 
       <View style={surveyCardStyles.body}>
-        <SurveyBody />
+        <SurveyBody options={options} />
       </View>
     </View>
   );

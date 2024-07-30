@@ -13,11 +13,12 @@ export default function App() {
   useEffect(() => {
     AsyncStorage.getItem("nativeLanguage").then((res) =>
       res ? setNativeIsSelected(true) : setNativeIsSelected(false)
-    );
+    ).catch(error=>console.log(error))
 
     AsyncStorage.getItem("isFirst").then((res) =>
       res ? setIsFirst(false) : setIsFirst(true)
-    );
+    ).catch(error=>console.log(error))
+
 
  
     
@@ -25,7 +26,7 @@ export default function App() {
 
   const onboardingOnPass = () => {
     setIsFirst((prev) => !prev);
-    AsyncStorage.setItem("isFirst", "it is not first");
+    AsyncStorage.setItem("isFirst", "it is not first").then(()=>console.log("err")).catch(err=>console.log(err))
   };
   if (!nativeIsSelected) {
     return (

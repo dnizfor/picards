@@ -12,7 +12,7 @@ export default function SettingsScreen() {
   useEffect(() => {
     AsyncStorage.getItem("nativeLanguage").then((res) =>
       setLanguage(JSON.parse(res).title)
-    );
+    ).catch(error=>console.log(error))
   }, [languageSelectIsOpen]);
   if (languageSelectIsOpen)
     return (

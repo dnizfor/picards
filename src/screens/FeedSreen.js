@@ -1,29 +1,66 @@
 import { View, Text, FlatList, StyleSheet, Dimensions } from "react-native";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FlashCard from "../components/feedScreen/FlashCard";
 import VidoCard from "../components/feedScreen/VidoCard";
 import SurveyCard from "../components/feedScreen/surveyCard/SurveyCard";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function FeedSreen({ mode }) {
-  const array = [1,2,3];
-  const tabBarHeight = useBottomTabBarHeight(); 
+export default function FeedSreen({ mode, choosedList }) {
+  const tabBarHeight = useBottomTabBarHeight();
+  const [vocabularyData, setVocabularyData] = useState([])
+  const [visibleItemId, setVisibleItemId] = useState("")
 
   const onViewableItemsChanged = ({ viewableItems }) => {
-    console.log("***********Visible items are", viewableItems[0].index);
+    setVisibleItemId(viewableItems[0].item.id)
+
   };
-  useEffect(() => {
-    console.log("'''''''''''''''''22mode", mode == "Flashcard");
-  }, [mode]);
+
+
+
+  useFocusEffect(
+    useCallback(() => {
+      // Burada yapmak istediğiniz işlemleri gerçekleştirin
+      console.log(choosedList);
+      if (choosedList.length === 0) {
+        return
+      }
+
+      // hata veriyor bu sebeple kaldırdık
+      // const queryConditions = choosedList
+      //   .map(item =>
+      //     `deck='${item.deck}'`
+
+      //   )
+      //   .join(' OR ');
+      // let query = `SELECT * FROM vocabularyData WHERE ${queryConditions} `;
+      let query = `SELECT * FROM vocabularyData `;
+
+      db.getAllAsync(
+        query
+      )
+        .then((result) => {
+          console.log("veri seçildi feed screen");
+          result.filter(data => choosedList.includes(data.deck))
+          setVocabularyData(result);
+        })
+        .catch((error) => {
+          console.log("Veri seçme hatası:", error, choosedList,);
+        });
+
+      return () => { };
+    }, [choosedList])
+  );
 
   const renderItem = ({ item, index }) => {
-    return (
-      <View style={{...feedScreenStyle.postContainer,height: Dimensions.get("window").height - tabBarHeight,}}>
-        {mode == "FlashCard" && <FlashCard word={item} mean={"itemitem"} />}
-        {mode == "VidoCard" && <VidoCard />}
 
-        {mode != "FlashCard" && mode != "VidoCard" && <SurveyCard />}
+    return (
+      <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
+        {mode == "FlashCard" && <FlashCard word={item.word} mean={item.mean} />}
+        {mode == "VidoCard" && <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />}
+
+        {mode != "FlashCard" && mode != "VidoCard" && <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />}
       </View>
     );
   };
@@ -31,9 +68,9 @@ export default function FeedSreen({ mode }) {
     <SafeAreaView>
       <FlatList
         renderItem={renderItem}
-        data={array}
+        data={vocabularyData}
         pagingEnabled={true}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.id}
         decelerationRate={"normal"}
         viewabilityConfig={{
           viewAreaCoveragePercentThreshold: 50,

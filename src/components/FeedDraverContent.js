@@ -9,6 +9,8 @@ export default function FeedDraverContent(props) {
   const [modIndex, setModIndex] = useState(0);
   const [deckList, setDeckList] = useState([]);
   const setMode = props.setMode;
+  const setChoosedList=props.setChoosedList
+  const choosedList=props.choosedList
  
   db = useSQLiteContext()
   useFocusEffect(
@@ -30,7 +32,6 @@ export default function FeedDraverContent(props) {
       return () => {};
     }, [])
   );
-  const [choosedList, setChoosedList] = useState([]);
   const onChoose = (deckName) => {
     if (choosedList.includes(deckName)) {
       const newChoosedList = choosedList.filter((item) => item !== deckName);

@@ -4,15 +4,23 @@ import { StyleSheet } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import { TouchableOpacity } from "react-native";
 
-export default function VidoCard() {
+export default function VidoCard({word,mean,videoUrl,isVisible}) {
   const [status, setStatus] = useState({});
   const video = useRef(null);
+ 
+useEffect(()=>{
+  if(isVisible){
+    video.current.playAsync()
+  }else{
+    video.current.pauseAsync()
+  }
 
+},[isVisible])
   return (
     <View style={vidoCardStyle.container}>
       <View style={vidoCardStyle.titleContainer}>
         <Text style={vidoCardStyle.title}>
-          VidoCardVidoCardVidoCardVidoCardVidoCar
+          {word}
         </Text>
       </View>
       <View style={vidoCardStyle.videoContainer}>
@@ -27,7 +35,7 @@ export default function VidoCard() {
             ref={video}
             style={styles.video}
             source={{
-              uri: "https://y.yarn.co/50e48925-0d48-4cd2-bdad-3bc7959e3cac.mp4",
+              uri: videoUrl,
             }}
             useNativeControls={false}
             resizeMode={ResizeMode.STRETCH}
@@ -38,7 +46,7 @@ export default function VidoCard() {
       </View>
 
       <View style={vidoCardStyle.titleContainer}>
-        <Text style={vidoCardStyle.title}>VidoCardVidoCard</Text>
+        <Text style={vidoCardStyle.title}>{mean}</Text>
       </View>
     </View>
   );

@@ -2,37 +2,19 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { FlatList, StatusBar, StyleSheet } from "react-native";
 import SurveyItem from "./SurveyItem";
+import keygen from "keygenerator"
 
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d71",
-    title: "4 Item",
-  },
-];
 
-const SurveyBody = () => {
-  const [selectedId, setSelectedId] = useState();
 
+const SurveyBody = ({options}) => {
+  const [selected, setSelected] = useState();
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? "#14A44D" : "white";
-    const color = item.id === selectedId ? "white" : "black";
-
+    const backgroundColor = item?.option === selected ?  (item?.isAnswer ? "#14A44D" : "#dc3545" ): "white";
+    const color = item?.option === selected ? "white" : "black";
     return (
       <SurveyItem
-        item={item}
-        onPress={() => setSelectedId(item.id)}
+      title={item?.option}
+        onPress={() => setSelected(item?.option)}
         backgroundColor={backgroundColor}
         textColor={color}
       />
@@ -42,10 +24,10 @@ const SurveyBody = () => {
   return (
     <View style={surveyBodyStyles.container}>
       <FlatList
-        data={DATA}
+        data={options}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedId}
+        keyExtractor={() => keygen._()}
+        extraData={selected}
       />
     </View>
   );
