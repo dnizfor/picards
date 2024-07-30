@@ -89,6 +89,7 @@ useEffect(()=>{
           viewAreaCoveragePercentThreshold: 50,
         }}
         onViewableItemsChanged={onViewableItemsChanged}
+        initialNumToRender={4}
       />
     </SafeAreaView>
   );
