@@ -8,7 +8,7 @@ const Drawer = createDrawerNavigator();
 
 export default function FeedDrawer() {
   const [mode, setMode] = useState("VidoCard");
-  const [choosedList, setChoosedList] = useState([]);
+  const [choosedList, setChoosedList] = useState("");
 
   
 

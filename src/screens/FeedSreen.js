@@ -42,7 +42,7 @@ export default function FeedSreen({ mode, choosedList }) {
       )
         .then((result) => {
           console.log("veri seçildi feed screen");
-          result.filter(data => choosedList.includes(data.deck))
+          result.filter(data => choosedList===(data.deck))
           setVocabularyData(result);
         })
         .catch((error) => {

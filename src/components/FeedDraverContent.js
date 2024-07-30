@@ -33,12 +33,7 @@ export default function FeedDraverContent(props) {
     }, [])
   );
   const onChoose = (deckName) => {
-    if (choosedList.includes(deckName)) {
-      const newChoosedList = choosedList.filter((item) => item !== deckName);
-      setChoosedList(newChoosedList);
-    } else {
-      setChoosedList((prev) => [...prev, deckName]);
-    }
+    setChoosedList((prev) => prev === deckName ? "" : deckName)
   };
   return (
     <DrawerContentScrollView {...props}>
@@ -60,7 +55,7 @@ export default function FeedDraverContent(props) {
         <DrawerItem
           label={item.deck}
           onPress={() => onChoose(item)}
-          focused={choosedList.includes(item)}
+          focused={choosedList === item}
           key={index}
         />
       ))}
