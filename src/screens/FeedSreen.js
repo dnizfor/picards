@@ -8,7 +8,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from "@react-navigation/native";
 import { useSQLiteContext } from "expo-sqlite";
 
-export default function FeedSreen({ mode, choosedList ,setDeckList}) {
+export default function FeedSreen({ mode, choosedList, setDeckList }) {
   const tabBarHeight = useBottomTabBarHeight();
   const [vocabularyData, setVocabularyData] = useState([])
   const [visibleItemId, setVisibleItemId] = useState("")
@@ -17,20 +17,20 @@ export default function FeedSreen({ mode, choosedList ,setDeckList}) {
     setVisibleItemId(viewableItems[0]?.item.id)
 
   };
-const db = useSQLiteContext()
-useEffect(()=>{
-  db.getAllAsync(
-    `SELECT DISTINCT deck FROM vocabularyData ;`
-  )
-    .then((result) => {
-      console.log("Seçilen veriler:", result);
-      console.log("feed screen açıldı ",result);
-      setDeckList(result);
-    })
-    .catch((error) => {
-      console.log("Veri seçme hatası:", error);
-    });
-},[])
+  const db = useSQLiteContext()
+  useEffect(() => {
+    db.getAllAsync(
+      `SELECT DISTINCT deck FROM vocabularyData ;`
+    )
+      .then((result) => {
+        console.log("Seçilen veriler:", result);
+        console.log("feed screen açıldı ", result);
+        setDeckList(result);
+      })
+      .catch((error) => {
+        console.log("Veri seçme hatası:", error);
+      });
+  }, [])
 
   useFocusEffect(
     useCallback(() => {
@@ -55,14 +55,14 @@ useEffect(()=>{
       )
         .then((result) => {
           console.log("veri seçildi feed screen");
-          result.filter(data => choosedList===(data.deck))
+          result.filter(data => choosedList === (data.deck))
           setVocabularyData(result);
         })
         .catch((error) => {
           console.log("Veri seçme hatası:", error, choosedList,);
         });
 
-     
+
 
       return () => { };
     }, [choosedList])
@@ -81,8 +81,11 @@ useEffect(()=>{
   };
   return (
     <SafeAreaView>
-      <FlatList
-        renderItem={renderItem}
+      {mode == "FlashCard" && <FlatList
+        renderItem={({item}) => <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
+          <FlashCard word={item.word} mean={item.mean} />
+
+        </View>}
         data={vocabularyData}
         pagingEnabled={true}
         keyExtractor={(item) => item.id}
@@ -92,7 +95,39 @@ useEffect(()=>{
         }}
         onViewableItemsChanged={onViewableItemsChanged}
         initialNumToRender={4}
-      />
+      />}
+
+      {mode == "VidoCard" && <FlatList
+        renderItem={({item}) => <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
+          <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />
+
+        </View>}
+        data={vocabularyData}
+        pagingEnabled={true}
+        keyExtractor={(item) => item.id}
+        decelerationRate={"normal"}
+        viewabilityConfig={{
+          viewAreaCoveragePercentThreshold: 50,
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        initialNumToRender={4}
+      />}
+
+      {mode != "FlashCard" && mode != "VidoCard" && <FlatList
+        renderItem={({item}) => <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
+
+          <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />
+        </View>}
+        data={vocabularyData}
+        pagingEnabled={true}
+        keyExtractor={(item) => item.id}
+        decelerationRate={"normal"}
+        viewabilityConfig={{
+          viewAreaCoveragePercentThreshold: 50,
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        initialNumToRender={4}
+      />}
     </SafeAreaView>
   );
 }
