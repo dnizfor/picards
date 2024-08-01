@@ -7,7 +7,7 @@ import SurveyCard from "../components/feedScreen/surveyCard/SurveyCard";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from "@react-navigation/native";
 import { useSQLiteContext } from "expo-sqlite";
-
+import { FlashList } from "@shopify/flash-list";
 export default function FeedSreen({ mode, choosedList, setDeckList }) {
   const tabBarHeight = useBottomTabBarHeight();
   const [vocabularyData, setVocabularyData] = useState([])
@@ -80,54 +80,21 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
     );
   };
   return (
-    <SafeAreaView>
-      {mode == "FlashCard" && <FlatList
-        renderItem={({item}) => <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
-          <FlashCard word={item.word} mean={item.mean} />
-
-        </View>}
+    <SafeAreaView style={{flex:1}}>
+       <FlashList
+        renderItem={renderItem}
         data={vocabularyData}
         pagingEnabled={true}
-        keyExtractor={(item) => item.id}
+        estimatedItemSize={200}
         decelerationRate={"normal"}
         viewabilityConfig={{
           viewAreaCoveragePercentThreshold: 50,
         }}
         onViewableItemsChanged={onViewableItemsChanged}
         initialNumToRender={4}
-      />}
+      />
 
-      {mode == "VidoCard" && <FlatList
-        renderItem={({item}) => <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
-          <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />
-
-        </View>}
-        data={vocabularyData}
-        pagingEnabled={true}
-        keyExtractor={(item) => item.id}
-        decelerationRate={"normal"}
-        viewabilityConfig={{
-          viewAreaCoveragePercentThreshold: 50,
-        }}
-        onViewableItemsChanged={onViewableItemsChanged}
-        initialNumToRender={4}
-      />}
-
-      {mode != "FlashCard" && mode != "VidoCard" && <FlatList
-        renderItem={({item}) => <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
-
-          <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />
-        </View>}
-        data={vocabularyData}
-        pagingEnabled={true}
-        keyExtractor={(item) => item.id}
-        decelerationRate={"normal"}
-        viewabilityConfig={{
-          viewAreaCoveragePercentThreshold: 50,
-        }}
-        onViewableItemsChanged={onViewableItemsChanged}
-        initialNumToRender={4}
-      />}
+     
     </SafeAreaView>
   );
 }
