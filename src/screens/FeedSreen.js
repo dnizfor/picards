@@ -12,6 +12,10 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
   const tabBarHeight = useBottomTabBarHeight();
   const [vocabularyData, setVocabularyData] = useState([])
   const [visibleItemId, setVisibleItemId] = useState("")
+  useEffect(()=>{
+    console.log(vocabularyData.length);
+    
+  },[vocabularyData])
 
   const onViewableItemsChanged = ({ viewableItems }) => {
     setVisibleItemId(viewableItems[0]?.item.id)
@@ -54,9 +58,9 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
         query
       )
         .then((result) => {
-          console.log("veri seçildi feed screen");
-          result.filter(data => choosedList === (data.deck))
-          setVocabularyData(result);
+          console.log("veri seçildi feed screen",choosedList,"okk");
+          const filteredData = result.filter(data => choosedList.deck === (data.deck))
+          setVocabularyData(filteredData);
         })
         .catch((error) => {
           console.log("Veri seçme hatası:", error, choosedList,);
