@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { FlatList, StatusBar, StyleSheet } from "react-native";
 import SurveyItem from "./SurveyItem";
 import keygen from "keygenerator"
+import { FlashList } from "@shopify/flash-list";
 
 
 
@@ -23,11 +24,12 @@ const SurveyBody = ({options}) => {
 
   return (
     <View style={surveyBodyStyles.container}>
-      <FlatList
+      <FlashList
         data={options}
         renderItem={renderItem}
-        keyExtractor={() => keygen._()}
+        // keyExtractor={() => keygen._()}
         extraData={selected}
+        estimatedItemSize={200}
       />
     </View>
   );
