@@ -12,10 +12,10 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
   const tabBarHeight = useBottomTabBarHeight();
   const [vocabularyData, setVocabularyData] = useState([])
   const [visibleItemId, setVisibleItemId] = useState("")
-  useEffect(()=>{
+  useEffect(() => {
     console.log(vocabularyData.length);
-    
-  },[vocabularyData])
+
+  }, [vocabularyData])
 
   const onViewableItemsChanged = ({ viewableItems }) => {
     setVisibleItemId(viewableItems[0]?.item.id)
@@ -58,7 +58,7 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
         query
       )
         .then((result) => {
-          console.log("veri seçildi feed screen",choosedList,"okk");
+          console.log("veri seçildi feed screen", choosedList, "okk");
           const filteredData = result.filter(data => choosedList.deck === (data.deck))
           setVocabularyData(filteredData);
         })
@@ -76,10 +76,8 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
 
     return (
       <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
-        {mode == "FlashCard" && <FlashCard word={item.word} mean={item.mean} />}
-        {mode == "VidoCard" && <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />}
+        <FlashCard word={item.word} mean={item.mean} />
 
-        {mode != "FlashCard" && mode != "VidoCard" && <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />}
       </View>
     );
   };
@@ -87,10 +85,7 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
 
     return (
       <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
-        {mode == "FlashCard" && <FlashCard word={item.word} mean={item.mean} />}
-        {mode == "VidoCard" && <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />}
-
-        {mode != "FlashCard" && mode != "VidoCard" && <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />}
+        <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />
       </View>
     );
   };
@@ -98,16 +93,14 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
 
     return (
       <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
-        {mode == "FlashCard" && <FlashCard word={item.word} mean={item.mean} />}
-        {mode == "VidoCard" && <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />}
 
-        {mode != "FlashCard" && mode != "VidoCard" && <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />}
+        <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />
       </View>
     );
   };
   return (
-    <SafeAreaView style={{flex:1}}>
-   { mode == "FlashCard" &&   <FlashList
+    <SafeAreaView style={{ flex: 1 }}>
+      {mode == "FlashCard" && <FlashList
         renderItem={renderFlashCard}
         data={vocabularyData}
         pagingEnabled={true}
@@ -119,7 +112,7 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
         onViewableItemsChanged={onViewableItemsChanged}
         initialNumToRender={4}
       />}
-         { mode == "VidoCard" &&   <FlashList
+      {mode == "VidoCard" && <FlashList
         renderItem={renderVidoCard}
         data={vocabularyData}
         pagingEnabled={true}
@@ -131,7 +124,7 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
         onViewableItemsChanged={onViewableItemsChanged}
         initialNumToRender={4}
       />}
-         {mode != "FlashCard" && mode != "VidoCard" &&  <FlashList
+      {mode != "FlashCard" && mode != "VidoCard" && <FlashList
         renderItem={renderSurveyCard}
         data={vocabularyData}
         pagingEnabled={true}
@@ -144,7 +137,7 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
         initialNumToRender={4}
       />}
 
-     
+
     </SafeAreaView>
   );
 }
