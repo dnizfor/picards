@@ -72,7 +72,29 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
     }, [choosedList])
   );
 
-  const renderItem = ({ item, index }) => {
+  const renderFlashCard = ({ item, index }) => {
+
+    return (
+      <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
+        {mode == "FlashCard" && <FlashCard word={item.word} mean={item.mean} />}
+        {mode == "VidoCard" && <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />}
+
+        {mode != "FlashCard" && mode != "VidoCard" && <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />}
+      </View>
+    );
+  };
+  const renderVidoCard = ({ item, index }) => {
+
+    return (
+      <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
+        {mode == "FlashCard" && <FlashCard word={item.word} mean={item.mean} />}
+        {mode == "VidoCard" && <VidoCard isVisible={visibleItemId === item.id} word={item.word} mean={item.mean} videoUrl={item.video} />}
+
+        {mode != "FlashCard" && mode != "VidoCard" && <SurveyCard isVisible={visibleItemId === item?.id} mean={item?.mean} videoUrl={item?.video} />}
+      </View>
+    );
+  };
+  const renderSurveyCard = ({ item, index }) => {
 
     return (
       <View style={{ ...feedScreenStyle.postContainer, height: Dimensions.get("window").height - tabBarHeight, }}>
@@ -85,8 +107,8 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
   };
   return (
     <SafeAreaView style={{flex:1}}>
-       <FlashList
-        renderItem={renderItem}
+   { mode == "FlashCard" &&   <FlashList
+        renderItem={renderFlashCard}
         data={vocabularyData}
         pagingEnabled={true}
         estimatedItemSize={200}
@@ -96,7 +118,31 @@ export default function FeedSreen({ mode, choosedList, setDeckList }) {
         }}
         onViewableItemsChanged={onViewableItemsChanged}
         initialNumToRender={4}
-      />
+      />}
+         { mode == "VidoCard" &&   <FlashList
+        renderItem={renderVidoCard}
+        data={vocabularyData}
+        pagingEnabled={true}
+        estimatedItemSize={200}
+        decelerationRate={"normal"}
+        viewabilityConfig={{
+          viewAreaCoveragePercentThreshold: 50,
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        initialNumToRender={4}
+      />}
+         {mode != "FlashCard" && mode != "VidoCard" &&  <FlashList
+        renderItem={renderSurveyCard}
+        data={vocabularyData}
+        pagingEnabled={true}
+        estimatedItemSize={200}
+        decelerationRate={"normal"}
+        viewabilityConfig={{
+          viewAreaCoveragePercentThreshold: 50,
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        initialNumToRender={4}
+      />}
 
      
     </SafeAreaView>
