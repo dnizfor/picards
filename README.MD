@@ -1,4 +1,4 @@
-Uygulamayi yeniden tasarlanacak ismi imagecards olacak 
+Uygulamayi yeniden tasarlanacak ismi PictuCards olacak 
 
 
 ## modlar
