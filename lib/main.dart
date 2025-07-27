@@ -4,6 +4,7 @@ import 'package:picards/navigation.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/screens/network_error_screen.dart';
 import 'package:picards/screens/onboarding_screen.dart';
+import 'package:picards/services/database_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -18,6 +19,7 @@ void main() async {
       systemNavigationBarColor: Color(0xFF121212),
     ),
   );
+  await DatabaseService.initializeDatabase();
   final prefs = await SharedPreferences.getInstance();
   final bool showHome = prefs.getBool('showHome') ?? false;
   runApp(
@@ -74,7 +76,10 @@ class _MainState extends State<Main> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xFF121212),
-        appBarTheme: AppBarTheme(backgroundColor: Color(0xFF121212)),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Color(0xFF121212),
+          surfaceTintColor: Color(0xFF121212),
+        ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Color(0xFF2979FF)),

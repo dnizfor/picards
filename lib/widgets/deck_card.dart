@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:picards/models/deck_model.dart';
+import 'package:picards/screens/deck_detail_screen.dart';
 
 class DeckCard extends StatefulWidget {
-  const DeckCard({super.key});
+  const DeckCard({super.key, required this.deck, required this.onDismissed});
+  final Deck deck;
+  final Function onDismissed;
 
   @override
   State<DeckCard> createState() => _DeckCardState();
@@ -11,26 +15,45 @@ class DeckCard extends StatefulWidget {
 class _DeckCardState extends State<DeckCard> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        Ionicons.checkmark,
-        size: 40,
-        color: Theme.of(context).colorScheme.primary,
+    return Dismissible(
+      key: widget.key!,
+      onDismissed: (direction) => widget.onDismissed(),
+      background: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Theme.of(context).colorScheme.error,
+        ),
+        padding: EdgeInsets.all(15),
       ),
-      title: Text(
-        'allah ve haramileri ',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          color: Colors.white,
+      child: ListTile(
+        leading: Icon(
+          Ionicons.checkmark,
+          size: 40,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        title: Text(
+          widget.deck.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        tileColor: Theme.of(context).colorScheme.surface,
+        trailing: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.directions_run),
+          iconSize: 30,
+        ),
+        minTileHeight: 100,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DeckDetailScreen(deck: widget.deck),
+          ),
         ),
       ),
-      tileColor: Theme.of(context).colorScheme.surface,
-      trailing: Icon(Icons.directions_run),
-      minVerticalPadding: 20,
-      minTileHeight: 100,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      onTap: () {},
     );
   }
 }
