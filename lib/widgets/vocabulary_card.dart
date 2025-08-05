@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:picards/services/image_service.dart';
 
 class VocabularyCard extends StatefulWidget {
   const VocabularyCard({
@@ -8,10 +9,12 @@ class VocabularyCard extends StatefulWidget {
     required this.onChangedMean,
     required this.word,
     required this.mean,
+    required this.onUnfocus,
   });
   final Function onDismissed;
   final Function onChangedWord;
   final Function onChangedMean;
+  final Function onUnfocus;
   final String word;
   final String mean;
 
@@ -22,11 +25,19 @@ class VocabularyCard extends StatefulWidget {
 class _VocabularyCardState extends State<VocabularyCard> {
   late TextEditingController _wordController;
   late TextEditingController _meanController;
+  final FocusNode _meanFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _meanFocusNode.addListener(() async {
+      String imagePath = await ImageService.createAndDownloadImage(
+        widget.word,
+        widget.mean,
+      );
 
+      widget.onUnfocus(imagePath);
+    });
     _wordController = TextEditingController(text: widget.word);
     _meanController = TextEditingController(text: widget.mean);
   }
@@ -35,6 +46,8 @@ class _VocabularyCardState extends State<VocabularyCard> {
   void dispose() {
     _wordController.dispose();
     _meanController.dispose();
+    _meanFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -79,6 +92,8 @@ class _VocabularyCardState extends State<VocabularyCard> {
             ),
             Divider(color: Theme.of(context).colorScheme.primary),
             TextFormField(
+              focusNode: _meanFocusNode,
+
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return '';

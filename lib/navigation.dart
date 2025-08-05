@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:picards/screens/deck_list_screen.dart';
 import 'package:picards/screens/feed_screen.dart';
-import 'package:picards/screens/profile_screen.dart';
+import 'package:picards/screens/config_screen.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -13,7 +13,7 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
   int _currenIndex = 0;
-  List<Widget> body = const [DeckListScreen(), FeedScreen(), ProfileScreen()];
+  List<Widget> body = const [DeckListScreen(), FeedScreen(), ConfigScreen()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

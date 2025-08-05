@@ -8,14 +8,14 @@ import 'package:picards/widgets/language_card.dart';
 import 'package:provider/provider.dart';
 import 'package:store_redirect/store_redirect.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class ConfigScreen extends StatefulWidget {
+  const ConfigScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ConfigScreen> createState() => _ConfigScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ConfigScreenState extends State<ConfigScreen> {
   @override
   Widget build(BuildContext context) {
     final nativeLanguageCode = context

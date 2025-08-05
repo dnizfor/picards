@@ -190,6 +190,9 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
 
                           onChangedMean: (value) =>
                               flashcardList[index].mean = value,
+
+                          onUnfocus: (value) =>
+                              flashcardList[index].imagePath = value,
                         ),
                     itemCount: flashcardList.length,
                     separatorBuilder: (context, index) => SizedBox(height: 20),
