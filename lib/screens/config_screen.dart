@@ -18,65 +18,66 @@ class ConfigScreen extends StatefulWidget {
 class _ConfigScreenState extends State<ConfigScreen> {
   @override
   Widget build(BuildContext context) {
-    final nativeLanguageCode = context
-        .read<LanguageProvider>()
-        .nativeLanguageCode;
-    final targetLanguageCode = context
-        .read<LanguageProvider>()
-        .targetLanguageCode;
+    final languageProvider = Provider.of<LanguageProvider>(context);
+
     return SafeArea(
       child: Scaffold(
-        body: ListView(
-          children: [
-            ArrowForwardButton(title: "Go Premium", onTap: () {}),
-            SizedBox(height: 10),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: EdgeInsets.only(bottom: 10),
-              child: Text(
-                "Native Language",
-                style: TextStyle(fontWeight: FontWeight.bold),
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+          child: ListView(
+            children: [
+              ArrowForwardButton(title: "Go Premium", onTap: () {}),
+              SizedBox(height: 10),
+              Container(
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  "Native Language",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            LanguageCard(
-              title: Utils.getLanguageFromCode(nativeLanguageCode),
-              code: nativeLanguageCode,
-              onPress: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const OnboardingScreen(),
-                  ),
-                );
-              },
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                "Target Language",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              LanguageCard(
+                title: Utils.getLanguageFromCode(
+                  languageProvider.nativeLanguageCode,
+                ),
+                code: languageProvider.nativeLanguageCode,
+                onPress: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const OnboardingScreen(),
+                    ),
+                  );
+                },
               ),
-            ),
-            LanguageCard(
-              title: "English",
-              code: targetLanguageCode,
-              onPress: () {},
-            ),
-            SizedBox(height: 10),
+              Container(
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  "Target Language",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              LanguageCard(
+                title: "English",
+                code: languageProvider.targetLanguageCode,
+                onPress: () {},
+              ),
+              SizedBox(height: 10),
 
-            ArrowForwardButton(
-              title: "Rate Us",
-              onTap: () => StoreRedirect.redirect(
-                androidAppId: "com.viralmo.vidolinai",
-                iOSAppId: "6742706069",
+              ArrowForwardButton(
+                title: "Rate Us",
+                onTap: () => StoreRedirect.redirect(
+                  androidAppId: "com.viralmo.vidolinai",
+                  iOSAppId: "6742706069",
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            ArrowForwardButton(
-              title: "Contac Us",
-              onTap: () => EmailService().sendMail('Support Vidolin AI'),
-            ),
-          ],
+              SizedBox(height: 10),
+              ArrowForwardButton(
+                title: "Contac Us",
+                onTap: () => EmailService().sendMail('Support Vidolin AI'),
+              ),
+            ],
+          ),
         ),
       ),
     );

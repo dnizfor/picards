@@ -48,7 +48,6 @@ class DatabaseService {
       flashcard.deckId = deckId;
       await DatabaseService.db.insert('flashcards', flashcard.toMap());
     }
-
     return deckId;
   }
 

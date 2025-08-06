@@ -38,7 +38,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<LanguageProvider>();
+    final languageProvider = Provider.of<LanguageProvider>(context);
+
     return Scaffold(
       backgroundColor: Color(0xFF121212),
       appBar: AppBar(
@@ -84,7 +85,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onPress: () => languageCardOnPress(
                         languages[index]['code'],
                         context,
-                        provider,
+                        languageProvider,
                       ),
                     );
                   },

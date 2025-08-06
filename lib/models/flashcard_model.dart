@@ -45,6 +45,6 @@ class Flashcard {
 
   @override
   String toString() {
-    return 'Flashcard(id: $id, word: $word, mean: $mean, deckId: $deckId)';
+    return 'Flashcard(id: $id, word: $word, mean: $mean, example: $example, exampleMean: $exampleMean, imagePath: $imagePath, deckId: $deckId)';
   }
 }

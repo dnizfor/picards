@@ -4,8 +4,10 @@ A new Flutter project.
 
 
 
-- image flashcard
-- gunluk paragraf atacagiz
-- translate 
-- chat olacak (ai cevabinda kelimeleri kullanarak cevap vermesini istiyecek)
-- ornek cumlelerle bosluk doldurma oye 
+- image flashcard - flashcard
+- translate - translate
+- reverseTranslate- image goster kelimeyi bul- - image 
+- ornek cumlelerle bosluk doldurma oye - gap filling ()
+- soruya verilen kelimeyle cevap ver - dialog
+
+- gunluk paragraf atacagiz (24 satte 1 )

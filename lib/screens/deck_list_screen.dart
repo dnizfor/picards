@@ -30,21 +30,25 @@ class _DeckListScreenState extends State<DeckListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.separated(
-              itemBuilder: (context, index) => DeckCard(
-                key: UniqueKey(),
-                deck: deckList[index],
-                onDismissed: () =>
-                    DatabaseService.deleteDeckById(deckList[index].id!),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) => DeckCard(
+                  key: UniqueKey(),
+                  deck: deckList[index],
+                  onDismissed: () =>
+                      DatabaseService.deleteDeckById(deckList[index].id!),
+                ),
+                itemCount: deckList.length,
+                separatorBuilder: (context, index) => SizedBox(height: 10),
               ),
-              itemCount: deckList.length,
-              separatorBuilder: (context, index) => SizedBox(height: 10),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(

@@ -31,13 +31,7 @@ class _NavigationState extends State<Navigation> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-
-          child: body[_currenIndex],
-        ),
-      ),
+      body: SafeArea(child: body[_currenIndex]),
     );
   }
 }

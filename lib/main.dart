@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:picards/navigation.dart';
+import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/screens/network_error_screen.dart';
 import 'package:picards/screens/onboarding_screen.dart';
@@ -22,33 +23,41 @@ void main() async {
   await DatabaseService.initializeDatabase();
   final prefs = await SharedPreferences.getInstance();
   final bool showHome = prefs.getBool('showHome') ?? false;
+
+  List<ConnectivityResult> connectivityResult = await Connectivity()
+      .checkConnectivity();
+  bool isNetworkConnected = !connectivityResult.contains(
+    ConnectivityResult.none,
+  );
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
+        ChangeNotifierProvider(create: (context) => FeedProvider()),
       ],
-      child: Main(showHome: showHome),
+      child: Main(showHome: showHome, isNetworkConnected: isNetworkConnected),
     ),
   );
 }
 
 class Main extends StatefulWidget {
-  const Main({super.key, required this.showHome});
+  const Main({
+    super.key,
+    required this.showHome,
+    required this.isNetworkConnected,
+  });
   final bool showHome;
-
+  final bool isNetworkConnected;
   @override
   State<Main> createState() => _MainState();
 }
 
 class _MainState extends State<Main> {
   // This widget is the root of your application.
-  bool isConnected = false;
 
   @override
   void initState() {
     super.initState();
-
-    checkConnectivity();
 
     if (widget.showHome) {
       Provider.of<LanguageProvider>(
@@ -56,18 +65,6 @@ class _MainState extends State<Main> {
         listen: false,
       ).initializeLanguageData();
     }
-  }
-
-  Future<bool> checkConnectivity() async {
-    List<ConnectivityResult> connectivityResult = await Connectivity()
-        .checkConnectivity();
-    bool networkIsConnected = !connectivityResult.contains(
-      ConnectivityResult.none,
-    );
-    setState(() {
-      isConnected = networkIsConnected;
-    });
-    return networkIsConnected;
   }
 
   @override
@@ -93,7 +90,7 @@ class _MainState extends State<Main> {
           shadow: Color(0xFF121212),
         ),
       ),
-      home: !isConnected
+      home: !widget.isNetworkConnected
           ? NetworkErrorScreen()
           : widget.showHome
           ? Navigation()
