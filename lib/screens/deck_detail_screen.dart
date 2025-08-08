@@ -92,13 +92,12 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     );
 
     List<dynamic> responseData = json.decode(response)['examples'];
-
     for (var i = 0; i < responseData.length; i++) {
-      final int idexOfData = partiallyEmptyExamplesWithIndex[i]['index'];
-      flashcardList[idexOfData].example =
-          partiallyEmptyExamplesWithIndex[i]['card'].example;
-      flashcardList[idexOfData].exampleMean =
-          partiallyEmptyExamplesWithIndex[i]['card'].exampleMean;
+      final int idexOfData = responseData[i]['index'];
+      setState(() {
+        flashcardList[idexOfData].example = responseData[i]['example'];
+        flashcardList[idexOfData].exampleMean = responseData[i]['exampleMean'];
+      });
     }
 
     if (widget.deck != null) {
