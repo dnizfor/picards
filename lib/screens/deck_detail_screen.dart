@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:picards/models/deck_model.dart';
 import 'package:picards/models/flashcard_model.dart';
 import 'package:picards/navigation.dart';
+import 'package:picards/providers/language_provider.dart';
 import 'package:picards/services/database_service.dart';
+import 'package:picards/services/vertex_ai_service.dart';
 import 'package:picards/widgets/vocabulary_card.dart';
+import 'package:provider/provider.dart';
 
 class DeckDetailScreen extends StatefulWidget {
   const DeckDetailScreen({super.key, this.deck});
@@ -68,7 +73,34 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     }
   }
 
-  Future<void> onSubmit() async {
+  Future<void> onSubmit(LanguageProvider provider) async {
+    List<Map<String, dynamic>> partiallyEmptyExamplesWithIndex = [];
+
+    for (int i = 0; i < flashcardList.length; i++) {
+      final card = flashcardList[i];
+      if (card.example!.trim().isEmpty || card.exampleMean!.trim().isEmpty) {
+        partiallyEmptyExamplesWithIndex.add({'index': i, 'card': card});
+      }
+    }
+
+    final String response = await VertexAiService().sendRequest(
+      VertexAiService.generateCreateExampleSentencePropmt(
+        cardsNeedingExamples: partiallyEmptyExamplesWithIndex,
+        nativeLang: provider.nativeLanguageCode,
+        targetLang: provider.targetLanguageCode,
+      ),
+    );
+
+    List<dynamic> responseData = json.decode(response)['examples'];
+
+    for (var i = 0; i < responseData.length; i++) {
+      final int idexOfData = partiallyEmptyExamplesWithIndex[i]['index'];
+      flashcardList[idexOfData].example =
+          partiallyEmptyExamplesWithIndex[i]['card'].example;
+      flashcardList[idexOfData].exampleMean =
+          partiallyEmptyExamplesWithIndex[i]['card'].exampleMean;
+    }
+
     if (widget.deck != null) {
       widget.deck!.name = deckName;
       await DatabaseService.updateExistingCollection(
@@ -87,6 +119,8 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = context.read<LanguageProvider>();
+
     return Scaffold(
       appBar: AppBar(),
       floatingActionButton: Column(
@@ -111,7 +145,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
               return ElevatedButton(
                 onPressed: !isValid || deckName == '' || flashcardList.isEmpty
                     ? null
-                    : onSubmit,
+                    : () => onSubmit(languageProvider),
 
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),

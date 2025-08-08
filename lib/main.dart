@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:picards/firebase_options.dart';
 import 'package:picards/navigation.dart';
 import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/providers/language_provider.dart';
@@ -29,6 +31,8 @@ void main() async {
   bool isNetworkConnected = !connectivityResult.contains(
     ConnectivityResult.none,
   );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
       providers: [

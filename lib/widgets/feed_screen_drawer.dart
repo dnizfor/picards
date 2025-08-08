@@ -25,6 +25,7 @@ class _FeedScreenDrawerState extends State<FeedScreenDrawer> {
     final feedProvider = Provider.of<FeedProvider>(context);
     return Drawer(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10),

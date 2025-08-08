@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1036608609506",
+    "project_id": "picards-d0dfa",
+    "storage_bucket": "picards-d0dfa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036608609506:android:66f535e18592fb84c5d2bb",
+        "android_client_info": {
+          "package_name": "com.example.picards"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm0_vxYXG4-U9hWZuXTHE5yuLIegGESr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
