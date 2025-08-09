@@ -21,7 +21,7 @@ class FeedProvider extends ChangeNotifier {
     updateFlashCardList();
   }
 
-  void updateDeckList() async {
+  Future<void> updateDeckList() async {
     List<Deck> updatedDeckList = await DatabaseService.getAllDecks();
     deckList = updatedDeckList;
     notifyListeners();
@@ -32,13 +32,15 @@ class FeedProvider extends ChangeNotifier {
     }
   }
 
-  void updateFlashCardList() async {
+  Future<void> updateFlashCardList() async {
     List<Flashcard> updatedFlashCardList = [];
-    if (selectedDeckId != null) {
-      updatedFlashCardList = await DatabaseService.getFlashcardsByDeckId(
-        selectedDeckId!,
-      );
+    if (selectedDeckId == null) {
+      setSelectedDeckId(deckList[0].id!);
     }
+
+    updatedFlashCardList = await DatabaseService.getFlashcardsByDeckId(
+      selectedDeckId!,
+    );
     flashcardList = updatedFlashCardList;
     notifyListeners();
   }

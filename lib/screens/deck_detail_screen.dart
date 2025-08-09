@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:picards/models/deck_model.dart';
 import 'package:picards/models/flashcard_model.dart';
 import 'package:picards/navigation.dart';
+import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/services/database_service.dart';
 import 'package:picards/services/vertex_ai_service.dart';
@@ -73,7 +74,10 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     }
   }
 
-  Future<void> onSubmit(LanguageProvider provider) async {
+  Future<void> onSubmit(
+    LanguageProvider languageProvider,
+    FeedProvider feedProvider,
+  ) async {
     List<Map<String, dynamic>> partiallyEmptyExamplesWithIndex = [];
 
     for (int i = 0; i < flashcardList.length; i++) {
@@ -83,21 +87,24 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
       }
     }
 
-    final String response = await VertexAiService().sendRequest(
-      VertexAiService.generateCreateExampleSentencePropmt(
-        cardsNeedingExamples: partiallyEmptyExamplesWithIndex,
-        nativeLang: provider.nativeLanguageCode,
-        targetLang: provider.targetLanguageCode,
-      ),
-    );
+    if (partiallyEmptyExamplesWithIndex.isNotEmpty) {
+      final String response = await VertexAiService().sendRequest(
+        VertexAiService.generateCreateExampleSentencePropmt(
+          cardsNeedingExamples: partiallyEmptyExamplesWithIndex,
+          nativeLang: languageProvider.nativeLanguageCode,
+          targetLang: languageProvider.targetLanguageCode,
+        ),
+      );
 
-    List<dynamic> responseData = json.decode(response)['examples'];
-    for (var i = 0; i < responseData.length; i++) {
-      final int idexOfData = responseData[i]['index'];
-      setState(() {
-        flashcardList[idexOfData].example = responseData[i]['example'];
-        flashcardList[idexOfData].exampleMean = responseData[i]['exampleMean'];
-      });
+      List<dynamic> responseData = json.decode(response)['examples'];
+      for (var i = 0; i < responseData.length; i++) {
+        final int idexOfData = responseData[i]['index'];
+        setState(() {
+          flashcardList[idexOfData].example = responseData[i]['example'];
+          flashcardList[idexOfData].exampleMean =
+              responseData[i]['exampleMean'];
+        });
+      }
     }
 
     if (widget.deck != null) {
@@ -109,6 +116,8 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     } else {
       await DatabaseService.onSaveNewCollection(deckName, flashcardList);
     }
+
+    await feedProvider.updateFlashCardList();
     if (!mounted) return;
 
     Navigator.of(context).pushReplacement(
@@ -119,6 +128,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final languageProvider = context.read<LanguageProvider>();
+    final feedProvider = Provider.of<FeedProvider>(context);
 
     return Scaffold(
       appBar: AppBar(),
@@ -144,7 +154,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
               return ElevatedButton(
                 onPressed: !isValid || deckName == '' || flashcardList.isEmpty
                     ? null
-                    : () => onSubmit(languageProvider),
+                    : () => onSubmit(languageProvider, feedProvider),
 
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),

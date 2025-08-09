@@ -62,6 +62,7 @@ class _MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
+    Provider.of<FeedProvider>(context, listen: false).updateDeckList();
 
     if (widget.showHome) {
       Provider.of<LanguageProvider>(

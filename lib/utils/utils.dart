@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:picards/models/flashcard_model.dart';
+
 class Utils {
   static const List<Map<String, String>> languagesData = [
     {"name": "Akan", "code": "ak"},
@@ -146,5 +150,48 @@ class Utils {
       }
     }
     return 'Unknow';
+  }
+
+  static List<Map<String, dynamic>> createOptions(
+    String selectedValue,
+    List<Flashcard> allCards,
+    String optionField,
+  ) {
+    Flashcard? selectedCard = allCards.firstWhere(
+      (card) =>
+          (optionField == 'word' ? card.word : card.mean) == selectedValue,
+      orElse: () => throw Exception('Selected value not found in flashcards'),
+    );
+
+    List<Flashcard> others = allCards
+        .where((card) => card.id != selectedCard.id)
+        .toList();
+
+    if (others.length < 2) {
+      throw Exception('Not enough flashcards to create options');
+    }
+
+    final random = Random();
+    Set<int> indices = {};
+    while (indices.length < 2) {
+      indices.add(random.nextInt(others.length));
+    }
+
+    List<Flashcard> options = indices.map((i) => others[i]).toList();
+    options.add(selectedCard);
+    options.shuffle(random);
+
+    return options.map((card) {
+      String optionValue;
+      if (optionField == 'word') {
+        optionValue = card.word!;
+      } else if (optionField == 'mean') {
+        optionValue = card.mean!;
+      } else {
+        throw Exception('optionField must be either "word" or "mean"');
+      }
+
+      return {'option': optionValue, 'answer': card.id == selectedCard.id};
+    }).toList();
   }
 }
