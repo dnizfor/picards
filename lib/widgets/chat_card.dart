@@ -51,6 +51,8 @@ class _ChatCardState extends State<ChatCard> {
     );
 
     final String responseData = json.decode(response)['question'];
+    if (!mounted) return;
+
     setState(() {
       question = responseData;
     });

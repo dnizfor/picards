@@ -118,6 +118,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
       await DatabaseService.onSaveNewCollection(deckName, flashcardList);
     }
 
+    await feedProvider.updateDeckList();
     await feedProvider.updateFlashCardList();
     if (!mounted) return;
 
