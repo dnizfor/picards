@@ -96,7 +96,10 @@ class _FeedScreenState extends State<FeedScreen> {
                       options: getOptions(feedProvider, card.word!, "word"),
                     );
                   } else if (feedProvider.practiceType == PracticeType.dialog) {
-                    return ChatCard();
+                    return ChatCard(
+                      word: card.word!,
+                      goToNextPage: goToNextPage,
+                    );
                   } else {
                     return Container();
                   }

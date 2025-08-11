@@ -88,13 +88,14 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     }
 
     if (partiallyEmptyExamplesWithIndex.isNotEmpty) {
-      final String response = await VertexAiService().sendRequest(
-        VertexAiService.generateCreateExampleSentencePropmt(
-          cardsNeedingExamples: partiallyEmptyExamplesWithIndex,
-          nativeLang: languageProvider.nativeLanguageCode,
-          targetLang: languageProvider.targetLanguageCode,
-        ),
-      );
+      final String response =
+          await VertexAiService.sendRequestForExampleSentences(
+            VertexAiService.generateCreateExampleSentencePropmt(
+              cardsNeedingExamples: partiallyEmptyExamplesWithIndex,
+              nativeLang: languageProvider.nativeLanguageCode,
+              targetLang: languageProvider.targetLanguageCode,
+            ),
+          );
 
       List<dynamic> responseData = json.decode(response)['examples'];
       for (var i = 0; i < responseData.length; i++) {

@@ -1,7 +1,7 @@
 import 'package:firebase_ai/firebase_ai.dart';
 
 class VertexAiService {
-  static final jsonSchema = Schema.object(
+  static final jsonSchemaForExampleSentences = Schema.object(
     properties: {
       'examples': Schema.array(
         items: Schema.object(
@@ -30,16 +30,64 @@ class VertexAiService {
     return '''Generate a simple example sentence in $targetLang for each of the following words. Also provide the translation in $nativeLang.Words:$wordList''';
   }
 
-  final model = FirebaseAI.vertexAI().generativeModel(
-    model: 'gemini-2.0-flash-lite-001',
-    generationConfig: GenerationConfig(
-      responseMimeType: 'application/json',
-      responseSchema: jsonSchema,
-    ),
+  static Future<String> sendRequestForExampleSentences(String newPrompt) async {
+    final model = FirebaseAI.vertexAI().generativeModel(
+      model: 'gemini-2.0-flash-lite-001',
+      generationConfig: GenerationConfig(
+        responseMimeType: 'application/json',
+        responseSchema: jsonSchemaForExampleSentences,
+      ),
+    );
+    final prompt = [Content.text(newPrompt)];
+
+    final response = await model.generateContent(prompt);
+
+    return response.text!;
+  }
+
+  static final jsonSchemaForQuestion = Schema.object(
+    properties: {'question': Schema.string()},
   );
 
-  Future<String> sendRequest(String newPrompt) async {
-    final prompt = [Content.text(newPrompt)];
+  static Future<String> createQuestionForWord(
+    String targetLanguage,
+    String word,
+  ) async {
+    final model = FirebaseAI.vertexAI().generativeModel(
+      model: 'gemini-2.0-flash-lite-001',
+      generationConfig: GenerationConfig(
+        responseMimeType: 'application/json',
+        responseSchema: jsonSchemaForQuestion,
+      ),
+    );
+    final prompt = [
+      Content.text(
+        'Create a question sentence in $targetLanguage language in which I can use the word "$word" when answering.',
+      ),
+    ];
+
+    final response = await model.generateContent(prompt);
+
+    return response.text!;
+  }
+
+  static final jsonSchemaForUserAnswer = Schema.object(
+    properties: {'check': Schema.boolean()},
+  );
+
+  static Future<String> checkUserAnswer(String question, String answer) async {
+    final model = FirebaseAI.vertexAI().generativeModel(
+      model: 'gemini-2.0-flash-lite-001',
+      generationConfig: GenerationConfig(
+        responseMimeType: 'application/json',
+        responseSchema: jsonSchemaForUserAnswer,
+      ),
+    );
+    final prompt = [
+      Content.text(
+        'The user was asked the question: "$question". The user answered: "$answer". Is this answer correct?',
+      ),
+    ];
 
     final response = await model.generateContent(prompt);
 
