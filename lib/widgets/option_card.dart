@@ -26,11 +26,11 @@ class _OptionCardState extends State<OptionCard> {
   AudioPlayer player = AudioPlayer();
 
   Future<void> playWrongSound() async {
-    await player.play(AssetSource('sounds/errorEffect.mp3'));
+    await player.play(AssetSource('sounds/error_effect.mp3'));
   }
 
   Future<void> playCorrectSound() async {
-    await player.play(AssetSource('sounds/successEffect.mp3'));
+    await player.play(AssetSource('sounds/success_effect.mp3'));
   }
 
   @override

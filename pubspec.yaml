@@ -54,6 +54,7 @@ dependencies:
   flutter_typing_indicator: ^0.0.4
   audioplayers: ^6.5.0
   queue: ^3.4.0
+  percent_indicator: ^4.2.5
 
 dev_dependencies:
   flutter_test:

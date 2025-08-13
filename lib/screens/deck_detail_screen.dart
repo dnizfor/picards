@@ -191,7 +191,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     if (step == 2) {
       return Center(
         child: Lottie.asset(
-          'assets/lotties/successfulAnimation.json',
+          'assets/lotties/successful_animation.json',
           repeat: false,
           width: 200,
           fit: BoxFit.fitWidth,
