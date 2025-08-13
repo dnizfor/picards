@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typing_indicator/flutter_typing_indicator.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/services/vertex_ai_service.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +22,36 @@ class _ChatCardState extends State<ChatCard> {
   late TextEditingController _controller;
   String question = '';
   List<Map<String, dynamic>> chat = [];
+  bool loading = false;
+  bool showTypingIndicator = false;
+  AudioPlayer player = AudioPlayer();
+
+  Future<void> playWrongSound() async {
+    await player.play(AssetSource('sounds/errorEffect.mp3'));
+  }
+
+  Future<void> playCorrectSound() async {
+    await player.play(AssetSource('sounds/successEffect.mp3'));
+  }
+
   Future<void> onSend() async {
     final String userMessage = _controller.text;
+    if (userMessage.trim() == '') return;
+    if (userMessage.trim() == widget.word) {
+      _controller.text = '';
+      playWrongSound();
+      setState(() {
+        chat.add({'message': userMessage, 'role': 'user'});
+      });
+      setState(() {
+        chat.add({'message': '❌😕🔄✨', 'role': 'assistant'});
+      });
+      return;
+    }
+
+    setState(() {
+      showTypingIndicator = true;
+    });
     _controller.text = '';
     setState(() {
       chat.add({'message': userMessage, 'role': 'user'});
@@ -29,15 +60,21 @@ class _ChatCardState extends State<ChatCard> {
     final String responseData = await VertexAiService.checkUserAnswer(
       question,
       userMessage,
+      widget.word,
     );
     final bool isResponseTrue = json.decode(responseData)['check'];
+    setState(() {
+      showTypingIndicator = false;
+    });
     if (isResponseTrue) {
+      playCorrectSound();
       setState(() {
         chat.add({'message': '🎉✅👍😊', 'role': 'assistant'});
       });
       await Future.delayed(Duration(seconds: 1));
       widget.goToNextPage();
     } else {
+      playWrongSound();
       setState(() {
         chat.add({'message': '❌😕🔄✨', 'role': 'assistant'});
       });
@@ -45,6 +82,9 @@ class _ChatCardState extends State<ChatCard> {
   }
 
   Future<void> getQuestion(String targetLanguage, String word) async {
+    setState(() {
+      loading = true;
+    });
     final String response = await VertexAiService.createQuestionForWord(
       targetLanguage,
       word,
@@ -54,6 +94,7 @@ class _ChatCardState extends State<ChatCard> {
     if (!mounted) return;
 
     setState(() {
+      loading = false;
       question = responseData;
     });
   }
@@ -98,15 +139,20 @@ class _ChatCardState extends State<ChatCard> {
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: AutoSizeText(
-                      question,
-                      textAlign: TextAlign.center,
-                      maxLines: 4,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 40,
-                      ),
-                    ),
+                    child: loading
+                        ? LoadingAnimationWidget.staggeredDotsWave(
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 70,
+                          )
+                        : AutoSizeText(
+                            question,
+                            textAlign: TextAlign.center,
+                            maxLines: 4,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40,
+                            ),
+                          ),
                   ),
                   RichText(
                     text: TextSpan(
@@ -146,6 +192,21 @@ class _ChatCardState extends State<ChatCard> {
                     separatorBuilder: (context, index) => SizedBox(height: 10),
                     itemCount: chat.length,
                   ),
+
+                  showTypingIndicator
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: TypingIndicator(
+                                backgroundColor: Colors.transparent,
+                                duration: Duration(milliseconds: 1500),
+                              ),
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
                 ],
               ),
             ),

@@ -7,6 +7,7 @@ import 'package:picards/widgets/chat_card.dart';
 import 'package:picards/widgets/empty_error.dart';
 import 'package:picards/widgets/feed_screen_drawer.dart';
 import 'package:picards/widgets/flashcard_container.dart';
+import 'package:picards/widgets/gap_filling_card.dart';
 import 'package:picards/widgets/image_test_card.dart';
 import 'package:picards/widgets/survey_card.dart';
 import 'package:provider/provider.dart';
@@ -89,9 +90,9 @@ class _FeedScreenState extends State<FeedScreen> {
                     );
                   } else if (feedProvider.practiceType ==
                       PracticeType.gapFilling) {
-                    return SurveyCard(
-                      title: card.word!,
-                      answer: card.mean!,
+                    return GapFillingCard(
+                      word: card.word!,
+                      answer: card.word!,
                       goToNextPage: goToNextPage,
                       options: getOptions(feedProvider, card.word!, "word"),
                     );

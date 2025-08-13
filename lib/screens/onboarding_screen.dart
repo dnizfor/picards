@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  const OnboardingScreen({super.key, this.step});
+  final int? step;
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -15,14 +16,30 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   List languages = [];
+  String nativeLanguageCode = '';
+  String targetLanguageCode = '';
+  int step = 0;
 
-  languageCardOnPress(nativeLanguageCode, context, provider) async {
+  Future<void> onSave(context, provider) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (widget.step != null) {
+      if (widget.step == 0) {
+        await prefs.setString('nativeLanguageCode', nativeLanguageCode);
+        provider.setNativeLanguageCode(nativeLanguageCode);
+      } else {
+        await prefs.setString('targetLanguageCode', targetLanguageCode);
+        provider.setTargetLanguageCode(targetLanguageCode);
+      }
+      Navigator.pop(context);
+
+      return;
+    }
     await prefs.setBool('showHome', true);
     await prefs.setString('nativeLanguageCode', nativeLanguageCode);
-    await prefs.setString('targetLanguageCode', 'en');
+    await prefs.setString('targetLanguageCode', targetLanguageCode);
     provider.setNativeLanguageCode(nativeLanguageCode);
-    provider.setTargetLanguageCode("en");
+    provider.setTargetLanguageCode(targetLanguageCode);
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (context) => const Navigation()));
@@ -31,6 +48,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.step == 0) {
+      setState(() {
+        step = 0;
+      });
+    } else if (widget.step == 1) {
+      setState(() {
+        step = 1;
+      });
+    }
     setState(() {
       languages = Utils.languagesData;
     });
@@ -47,7 +73,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         surfaceTintColor: Color(0xFF121212),
         title: Center(
           child: Text(
-            "Native Language",
+            step == 0 ? "Native Language" : "Target Language",
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -65,7 +91,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 color: Color(0xFF121212),
                 padding: EdgeInsets.only(bottom: 20),
                 child: Text(
-                  "This language will be used for instructions, explanations, and translations throughout the app. You can change it anytime later in the settings.",
+                  step == 0
+                      ? "This language will be used for instructions, explanations, and translations throughout the app. You can change it anytime later in the settings."
+                      : 'This language will be used for flashcards and translations. You can change it anytime later in the settings.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -82,11 +110,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     return LanguageCard(
                       title: languages[index]['name'],
                       code: languages[index]['code'],
-                      onPress: () => languageCardOnPress(
-                        languages[index]['code'],
-                        context,
-                        languageProvider,
-                      ),
+                      onPress: () {
+                        if (step == 0) {
+                          if (widget.step == null) {
+                            setState(() {
+                              nativeLanguageCode = languages[index]['code'];
+                              step = 1;
+                            });
+                          } else {
+                            setState(() {
+                              nativeLanguageCode = languages[index]['code'];
+                            });
+                            onSave(context, languageProvider);
+                          }
+                        } else {
+                          setState(() {
+                            targetLanguageCode = languages[index]['code'];
+                          });
+                          onSave(context, languageProvider);
+                        }
+                      },
                     );
                   },
                   separatorBuilder: (context, index) => SizedBox(height: 10),

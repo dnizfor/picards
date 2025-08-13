@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:picards/models/deck_model.dart';
 import 'package:picards/models/flashcard_model.dart';
 import 'package:picards/navigation.dart';
@@ -20,9 +22,12 @@ class DeckDetailScreen extends StatefulWidget {
 
 class _DeckDetailScreenState extends State<DeckDetailScreen> {
   String deckName = "";
+  int step = 0;
   List<Flashcard> flashcardList = [];
   final ValueNotifier<bool> _isFormValid = ValueNotifier(false);
   final TextEditingController _deckNameController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +49,18 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     }
   }
 
+  void onFocusEnd() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
   void addEmptyFlashcard() {
     final Flashcard newFlashcard = Flashcard(
       word: '',
@@ -55,6 +72,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     setState(() {
       flashcardList.add(newFlashcard);
     });
+    onFocusEnd();
     _isFormValid.value = false;
   }
 
@@ -78,6 +96,9 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     LanguageProvider languageProvider,
     FeedProvider feedProvider,
   ) async {
+    setState(() {
+      step = 1;
+    });
     List<Map<String, dynamic>> partiallyEmptyExamplesWithIndex = [];
 
     for (int i = 0; i < flashcardList.length; i++) {
@@ -121,7 +142,11 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     await feedProvider.updateDeckList();
     await feedProvider.updateFlashCardList();
     if (!mounted) return;
-
+    setState(() {
+      step = 2;
+    });
+    await Future.delayed(Duration(seconds: 2));
+    if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => const Navigation()),
     );
@@ -131,6 +156,25 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
   Widget build(BuildContext context) {
     final languageProvider = context.read<LanguageProvider>();
     final feedProvider = Provider.of<FeedProvider>(context);
+
+    if (step == 1) {
+      return Center(
+        child: LoadingAnimationWidget.staggeredDotsWave(
+          size: 150,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      );
+    }
+    if (step == 2) {
+      return Center(
+        child: Lottie.asset(
+          'assets/lotties/successfulAnimation.json',
+          repeat: false,
+          width: 200,
+          fit: BoxFit.fitWidth,
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(),
@@ -224,6 +268,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
                 ),
                 Expanded(
                   child: ListView.separated(
+                    controller: scrollController,
                     itemBuilder: (BuildContext context, int index) =>
                         VocabularyCard(
                           word: flashcardList[index].word ?? '',

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_ai/firebase_ai.dart';
 
 class VertexAiService {
@@ -62,7 +64,7 @@ class VertexAiService {
     );
     final prompt = [
       Content.text(
-        'Create a question sentence in $targetLanguage language in which I can use the word "$word" when answering.',
+        'Create a question sentence in $targetLanguage language in which I can use the word "$word" when answering.The answer to the question should not be that word directly, the user should answer by using the word in a sentence.',
       ),
     ];
 
@@ -75,7 +77,11 @@ class VertexAiService {
     properties: {'check': Schema.boolean()},
   );
 
-  static Future<String> checkUserAnswer(String question, String answer) async {
+  static Future<String> checkUserAnswer(
+    String question,
+    String answer,
+    String word,
+  ) async {
     final model = FirebaseAI.vertexAI().generativeModel(
       model: 'gemini-2.0-flash-lite-001',
       generationConfig: GenerationConfig(
@@ -85,9 +91,34 @@ class VertexAiService {
     );
     final prompt = [
       Content.text(
-        'The user was asked the question: "$question". The user answered: "$answer". Is this answer correct?',
+        'The user was asked the question: "$question". The user answered: "$answer". Is this answer correct? The user uses the word $word when answering',
       ),
     ];
+
+    final response = await model.generateContent(prompt);
+
+    return response.text!;
+  }
+
+  static String createGapFillingTextPropmt(String targetLanguage, String word) {
+    Random random = Random();
+    int randomNumber = random.nextInt(100);
+    return "Write an example sentence in $targetLanguage language using the word $word. Replace the word with __ in the sentence."
+        "'seed': $randomNumber";
+  }
+
+  static final jsonSchemaForGapFillingText = Schema.object(
+    properties: {'text': Schema.string()},
+  );
+  static Future<String> sendRequestForGapFillingText(String newPrompt) async {
+    final model = FirebaseAI.vertexAI().generativeModel(
+      model: 'gemini-2.0-flash-lite-001',
+      generationConfig: GenerationConfig(
+        responseMimeType: 'application/json',
+        responseSchema: jsonSchemaForGapFillingText,
+      ),
+    );
+    final prompt = [Content.text(newPrompt)];
 
     final response = await model.generateContent(prompt);
 

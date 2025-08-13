@@ -44,7 +44,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                 onPress: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const OnboardingScreen(),
+                      builder: (context) => const OnboardingScreen(step: 0),
                     ),
                   );
                 },
@@ -58,9 +58,15 @@ class _ConfigScreenState extends State<ConfigScreen> {
                 ),
               ),
               LanguageCard(
-                title: "English",
+                title: Utils.getLanguageFromCode(
+                  languageProvider.targetLanguageCode,
+                ),
                 code: languageProvider.targetLanguageCode,
-                onPress: () {},
+                onPress: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const OnboardingScreen(step: 1),
+                  ),
+                ),
               ),
               SizedBox(height: 10),
 

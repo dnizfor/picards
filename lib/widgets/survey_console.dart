@@ -26,6 +26,7 @@ class _SurveyConsoleState extends State<SurveyConsole> {
         children: [
           Expanded(
             child: ListView.separated(
+              reverse: true,
               itemBuilder: (context, index) => OptionCard(
                 title: widget.options[index]['option'],
                 isSelectionMade: isSelectionMade,

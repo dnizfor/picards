@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class OptionCard extends StatefulWidget {
@@ -21,6 +22,17 @@ class OptionCard extends StatefulWidget {
 
 class _OptionCardState extends State<OptionCard> {
   bool isSelected = false;
+
+  AudioPlayer player = AudioPlayer();
+
+  Future<void> playWrongSound() async {
+    await player.play(AssetSource('sounds/errorEffect.mp3'));
+  }
+
+  Future<void> playCorrectSound() async {
+    await player.play(AssetSource('sounds/successEffect.mp3'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -31,6 +43,11 @@ class _OptionCardState extends State<OptionCard> {
                 isSelected = true;
               });
               widget.select();
+              if (widget.isAnswer) {
+                playCorrectSound();
+              } else {
+                playWrongSound();
+              }
               await Future.delayed(Duration(seconds: 1));
               widget.goToNextPage();
             },
