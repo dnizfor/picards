@@ -39,7 +39,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
         ChangeNotifierProvider(create: (context) => FeedProvider()),
       ],
-      child: Main(showHome: showHome, isNetworkConnected: isNetworkConnected),
+      child: Main(showHome: false, isNetworkConnected: isNetworkConnected),
     ),
   );
 }

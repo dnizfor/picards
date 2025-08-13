@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:picards/navigation.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/utils/utils.dart';
@@ -19,6 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   String nativeLanguageCode = '';
   String targetLanguageCode = '';
   int step = 0;
+  String selectedLanguageCode = '';
 
   Future<void> onSave(context, provider) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,9 +42,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await prefs.setString('targetLanguageCode', targetLanguageCode);
     provider.setNativeLanguageCode(nativeLanguageCode);
     provider.setTargetLanguageCode(targetLanguageCode);
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => const Navigation()));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const Navigation()),
+    );
   }
 
   @override
@@ -68,6 +70,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       backgroundColor: Color(0xFF121212),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (widget.step == null) {
+            if (step == 0) {
+              setState(() {
+                step = 1;
+              });
+            } else {
+              onSave(context, languageProvider);
+            }
+          } else {
+            onSave(context, languageProvider);
+          }
+          selectedLanguageCode = '';
+        },
+        shape: CircleBorder(),
+        child: Icon(Ionicons.chevron_forward, color: Colors.white, size: 30),
+      ),
       appBar: AppBar(
         backgroundColor: Color(0xFF121212),
         surfaceTintColor: Color(0xFF121212),
@@ -110,24 +130,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     return LanguageCard(
                       title: languages[index]['name'],
                       code: languages[index]['code'],
+                      isSelected:
+                          selectedLanguageCode == languages[index]['code'],
                       onPress: () {
+                        selectedLanguageCode = languages[index]['code'];
                         if (step == 0) {
-                          if (widget.step == null) {
-                            setState(() {
-                              nativeLanguageCode = languages[index]['code'];
-                              step = 1;
-                            });
-                          } else {
-                            setState(() {
-                              nativeLanguageCode = languages[index]['code'];
-                            });
-                            onSave(context, languageProvider);
-                          }
+                          setState(() {
+                            nativeLanguageCode = languages[index]['code'];
+                          });
                         } else {
                           setState(() {
                             targetLanguageCode = languages[index]['code'];
                           });
-                          onSave(context, languageProvider);
                         }
                       },
                     );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:queue/queue.dart';
 
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -9,6 +10,7 @@ import 'package:picards/navigation.dart';
 import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/services/database_service.dart';
+import 'package:picards/services/image_service.dart';
 import 'package:picards/services/vertex_ai_service.dart';
 import 'package:picards/widgets/vocabulary_card.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
   final ValueNotifier<bool> _isFormValid = ValueNotifier(false);
   final TextEditingController _deckNameController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+  final queue = Queue(parallel: 1);
 
   @override
   void initState() {
@@ -61,7 +64,20 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     });
   }
 
-  void addEmptyFlashcard() {
+  Future<void> cretaeImageForEx(int index) async {
+    if (flashcardList.length > 1 &&
+        flashcardList[index].word!.trim() != '' &&
+        flashcardList[index].mean!.trim() != '') {
+      final Flashcard lastFlashcard = flashcardList[index];
+      String imagePath = await ImageService.createAndDownloadImage(
+        lastFlashcard.word!,
+        lastFlashcard.mean!,
+      );
+      flashcardList[index].imagePath = imagePath;
+    }
+  }
+
+  Future<void> addEmptyFlashcard() async {
     final Flashcard newFlashcard = Flashcard(
       word: '',
       mean: '',
@@ -69,6 +85,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
       exampleMean: '',
       imagePath: '',
     );
+
     setState(() {
       flashcardList.add(newFlashcard);
     });
@@ -99,6 +116,10 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     setState(() {
       step = 1;
     });
+    // create image for last card
+
+    queue.add(() => cretaeImageForEx(flashcardList.length - 1));
+
     List<Map<String, dynamic>> partiallyEmptyExamplesWithIndex = [];
 
     for (int i = 0; i < flashcardList.length; i++) {
@@ -128,6 +149,8 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
         });
       }
     }
+
+    await queue.onComplete;
 
     if (widget.deck != null) {
       widget.deck!.name = deckName;
@@ -182,7 +205,11 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: addEmptyFlashcard,
+            onPressed: () => addEmptyFlashcard().then(
+              (value) =>
+                  queue.add(() => cretaeImageForEx(flashcardList.length - 2)),
+            ),
+
             style: ElevatedButton.styleFrom(
               shape: CircleBorder(),
               padding: EdgeInsets.all(10),
@@ -280,9 +307,6 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
 
                           onChangedMean: (value) =>
                               flashcardList[index].mean = value,
-
-                          onUnfocus: (value) =>
-                              flashcardList[index].imagePath = value,
                         ),
                     itemCount: flashcardList.length,
                     separatorBuilder: (context, index) => SizedBox(height: 20),

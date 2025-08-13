@@ -10,11 +10,11 @@ class ImageService {
 
   static String generateFlashcardPrompt(String word, String mean) {
     return '''
-Create a colorful, eye-catching flashcard-style illustration for the English word "$word" meaning "$mean".
-Show the word "$word" in large, bold, playful letters at the top.
-Illustrate the meaning "$mean" with a clear, memorable scene or object that visually explains it.
-Make the style bright, cartoon-like, and friendly, similar to children's educational cards.
-Ensure the design is simple, with minimal text other than the word, and the visual strongly conveys the meaning without needing translation.
+Create a bright, colorful, and cartoon-style illustration representing the meaning of the English word "$word", which means "$mean".
+Do NOT include any text in the image.
+Focus on a simple, clear visual that conveys the meaning in an engaging and memorable way.
+Use a friendly, child-educational style with bold colors and playful design.
+The illustration should be easy to understand at a glance and visually convey "$mean".
 ''';
   }
 
@@ -22,7 +22,7 @@ Ensure the design is simple, with minimal text other than the word, and the visu
     final String prompt = generateFlashcardPrompt(word, mean);
     final response = await http.get(
       Uri.parse(
-        'https://image.pollinations.ai/prompt/$prompt?model=turbo&nologo=true&private=true',
+        'https://image.pollinations.ai/prompt/$prompt?model=flux&nologo=true&private=true',
       ),
     );
 
