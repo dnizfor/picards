@@ -194,4 +194,14 @@ class Utils {
       return {'option': optionValue, 'answer': card.id == selectedCard.id};
     }).toList();
   }
+
+  static List<String> splitIntoSentences(String text) {
+    RegExp regExp = RegExp(r'(?<=[.!?])\s+');
+    List<String> sentences = text.split(regExp);
+    sentences = sentences
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+    return sentences;
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:firebase_ai/firebase_ai.dart';
+import 'package:picards/models/flashcard_model.dart';
 
 class VertexAiService {
   static final jsonSchemaForExampleSentences = Schema.object(
@@ -118,6 +119,34 @@ class VertexAiService {
         responseSchema: jsonSchemaForGapFillingText,
       ),
     );
+    final prompt = [Content.text(newPrompt)];
+
+    final response = await model.generateContent(prompt);
+
+    return response.text!;
+  }
+
+  static String createStoryPropmt(
+    String targetLanguage,
+    List<Flashcard> flashcardList,
+  ) {
+    String words = flashcardList.map((e) => e.word.toString()).join(", ");
+
+    return "Write a story in $targetLanguage. The story should naturally include the following words: $words. ";
+  }
+
+  static final jsonSchemaForCreateStory = Schema.object(
+    properties: {'story': Schema.string()},
+  );
+  static Future<String> sendRequestForCreateStory(String newPrompt) async {
+    final model = FirebaseAI.vertexAI().generativeModel(
+      model: 'gemini-2.0-flash-lite-001',
+      generationConfig: GenerationConfig(
+        responseMimeType: 'application/json',
+        responseSchema: jsonSchemaForCreateStory,
+      ),
+    );
+
     final prompt = [Content.text(newPrompt)];
 
     final response = await model.generateContent(prompt);

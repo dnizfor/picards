@@ -116,4 +116,14 @@ class DatabaseService {
   static Future<void> deleteDeckById(int deckId) async {
     await db.delete('decks', where: 'id = ?', whereArgs: [deckId]);
   }
+
+  static Future<List<Flashcard>> getRandomFlashcards() async {
+    final List<Map<String, dynamic>> result = await db.query(
+      'flashcards',
+      orderBy: 'RANDOM()',
+      limit: 20,
+    );
+
+    return result.map((map) => Flashcard.fromMap(map)).toList();
+  }
 }

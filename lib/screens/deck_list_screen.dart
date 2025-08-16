@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:picards/models/deck_model.dart';
 import 'package:picards/screens/deck_detail_screen.dart';
 import 'package:picards/services/database_service.dart';
+import 'package:picards/widgets/story_time_button.dart';
+
 import 'package:picards/widgets/deck_card.dart';
 
 class DeckListScreen extends StatefulWidget {
@@ -31,10 +35,19 @@ class _DeckListScreenState extends State<DeckListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         child: Column(
           children: [
+            StoryTimeButton(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                children: [
+                  Text('Decks:', style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+
             Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) => DeckCard(
