@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:picards/models/deck_model.dart';
+import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/screens/deck_detail_screen.dart';
 import 'package:picards/services/database_service.dart';
 import 'package:picards/widgets/story_time_button.dart';
 
 import 'package:picards/widgets/deck_card.dart';
+import 'package:provider/provider.dart';
 
 class DeckListScreen extends StatefulWidget {
   const DeckListScreen({super.key});
@@ -33,6 +35,8 @@ class _DeckListScreenState extends State<DeckListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -53,8 +57,10 @@ class _DeckListScreenState extends State<DeckListScreen> {
                 itemBuilder: (context, index) => DeckCard(
                   key: UniqueKey(),
                   deck: deckList[index],
-                  onDismissed: () =>
-                      DatabaseService.deleteDeckById(deckList[index].id!),
+                  onDismissed: () {
+                    DatabaseService.deleteDeckById(deckList[index].id!);
+                    feedProvider.updateDeckList();
+                  },
                 ),
                 itemCount: deckList.length,
                 separatorBuilder: (context, index) => SizedBox(height: 10),

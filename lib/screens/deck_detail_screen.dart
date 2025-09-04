@@ -10,7 +10,6 @@ import 'package:picards/navigation.dart';
 import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/services/database_service.dart';
-import 'package:picards/services/image_service.dart';
 import 'package:picards/services/vertex_ai_service.dart';
 import 'package:picards/widgets/vocabulary_card.dart';
 import 'package:provider/provider.dart';
@@ -64,12 +63,12 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     });
   }
 
-  Future<void> cretaeImageForEx(int index) async {
+  Future<void> createImageForEx(int index) async {
     if (flashcardList.length > 1 &&
         flashcardList[index].word!.trim() != '' &&
         flashcardList[index].mean!.trim() != '') {
       final Flashcard lastFlashcard = flashcardList[index];
-      String imagePath = await ImageService.createAndDownloadImage(
+      String imagePath = await VertexAiService.createAndDownloadImage(
         lastFlashcard.word!,
         lastFlashcard.mean!,
       );
@@ -118,7 +117,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     });
     // create image for last card
 
-    queue.add(() => cretaeImageForEx(flashcardList.length - 1));
+    queue.add(() => createImageForEx(flashcardList.length - 1));
 
     List<Map<String, dynamic>> partiallyEmptyExamplesWithIndex = [];
 
@@ -207,7 +206,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
           ElevatedButton(
             onPressed: () => addEmptyFlashcard().then(
               (value) =>
-                  queue.add(() => cretaeImageForEx(flashcardList.length - 2)),
+                  queue.add(() => createImageForEx(flashcardList.length - 2)),
             ),
 
             style: ElevatedButton.styleFrom(

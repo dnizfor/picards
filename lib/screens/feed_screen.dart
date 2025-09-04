@@ -80,7 +80,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final feedProvider = Provider.of<FeedProvider>(context);
+    final feedProvider = Provider.of<FeedProvider>(context, listen: true);
 
     return Scaffold(
       onDrawerChanged: (isOpened) {

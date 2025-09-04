@@ -70,24 +70,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       backgroundColor: Color(0xFF121212),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (widget.step == null) {
-            if (step == 0) {
-              setState(() {
-                step = 1;
-              });
-            } else {
-              onSave(context, languageProvider);
-            }
-          } else {
-            onSave(context, languageProvider);
-          }
-          selectedLanguageCode = '';
-        },
-        shape: CircleBorder(),
-        child: Icon(Ionicons.chevron_forward, color: Colors.white, size: 30),
-      ),
+      floatingActionButton: selectedLanguageCode == ''
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                if (widget.step == null) {
+                  if (step == 0) {
+                    setState(() {
+                      step = 1;
+                    });
+                  } else {
+                    onSave(context, languageProvider);
+                  }
+                } else {
+                  onSave(context, languageProvider);
+                }
+                selectedLanguageCode = '';
+              },
+              shape: CircleBorder(),
+              child: Icon(
+                Ionicons.chevron_forward,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
       appBar: AppBar(
         backgroundColor: Color(0xFF121212),
         surfaceTintColor: Color(0xFF121212),

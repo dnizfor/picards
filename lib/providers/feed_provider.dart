@@ -27,20 +27,22 @@ class FeedProvider extends ChangeNotifier {
     notifyListeners();
     if (!updatedDeckList.any((deck) => deck.id == selectedDeckId) &&
         updatedDeckList.isNotEmpty) {
-      updateFlashCardList();
       setSelectedDeckId(updatedDeckList[0].id!);
     }
+    updateFlashCardList();
   }
 
   Future<void> updateFlashCardList() async {
     List<Flashcard> updatedFlashCardList = [];
-    if (selectedDeckId == null) {
+    if (selectedDeckId == null && deckList.isNotEmpty) {
       setSelectedDeckId(deckList[0].id!);
+    } else if (deckList.isEmpty) {
+      updatedFlashCardList = [];
+    } else {
+      updatedFlashCardList = await DatabaseService.getFlashcardsByDeckId(
+        selectedDeckId!,
+      );
     }
-
-    updatedFlashCardList = await DatabaseService.getFlashcardsByDeckId(
-      selectedDeckId!,
-    );
     flashcardList = updatedFlashCardList;
     notifyListeners();
   }
