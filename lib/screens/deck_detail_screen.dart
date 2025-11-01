@@ -1,5 +1,9 @@
 import 'dart:convert';
 import 'package:queue/queue.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -28,6 +32,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
   final ValueNotifier<bool> _isFormValid = ValueNotifier(false);
   final TextEditingController _deckNameController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+
   final queue = Queue(parallel: 1);
 
   @override
@@ -63,16 +68,105 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     });
   }
 
-  Future<void> createImageForEx(int index) async {
-    if (flashcardList.length > 1 &&
-        flashcardList[index].word!.trim() != '' &&
-        flashcardList[index].mean!.trim() != '') {
-      final Flashcard lastFlashcard = flashcardList[index];
-      String imagePath = await VertexAiService.createAndDownloadImage(
-        lastFlashcard.word!,
-        lastFlashcard.mean!,
+  Future<void> createImageForEx(int index, String langCode) async {
+    if (flashcardList.isEmpty ||
+        flashcardList[index].word!.trim().isEmpty ||
+        flashcardList[index].mean!.trim().isEmpty) {
+      return;
+    }
+
+    final Flashcard lastFlashcard = flashcardList[index];
+    final String word = lastFlashcard.word!.trim();
+    final String mean = lastFlashcard.mean!.trim();
+    final String fileName = '$langCode-${word.toLowerCase()}';
+    final storageRef = FirebaseStorage.instance.ref().child(
+      'vocabulary-images/$fileName.png',
+    );
+
+    String? imageUrl;
+
+    try {
+      imageUrl = await storageRef.getDownloadURL().timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          debugPrint('⏱️ Storage getDownloadURL timeout!');
+          throw Exception('Storage timeout');
+        },
       );
-      flashcardList[index].imagePath = imagePath;
+    } catch (e) {
+      debugPrint(' $e');
+    }
+
+    // 🔧 Eğer görsel yoksa Vertex AI ile oluştur
+    if (imageUrl == null) {
+      String? imagePath;
+      try {
+        imagePath = await VertexAiService.createAndDownloadImage(word, mean)
+            .timeout(
+              const Duration(seconds: 40),
+              onTimeout: () {
+                throw Exception('Vertex AI timeout');
+              },
+            );
+
+        if (imagePath.isEmpty) {
+          debugPrint(
+            '💥 Vertex AI returned an empty path, loading was aborted.',
+          );
+          return;
+        }
+
+        // 🔎 Dosya var mı kontrol et
+        final file = File(imagePath);
+        if (!file.existsSync()) {
+          debugPrint('💥 File not found! Path: $imagePath');
+          return;
+        }
+
+        // 🧩 Firebase Storage’a yükle
+        await storageRef
+            .putFile(file)
+            .timeout(
+              const Duration(seconds: 20),
+              onTimeout: () {
+                debugPrint('⏱️ putFile zaman aşımına uğradı!');
+                throw Exception('Upload timeout');
+              },
+            );
+
+        imageUrl = await storageRef.getDownloadURL().timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            throw Exception('URL fetch timeout');
+          },
+        );
+
+        flashcardList[index].imagePath = imagePath;
+      } catch (e) {
+        debugPrint('⚠️ $e');
+        return;
+      }
+    } else {
+      // 🔽 Storage'daki görseli indirip cihazda sakla
+      try {
+        final tempDir = await getTemporaryDirectory();
+        final localPath = '${tempDir.path}/$fileName.png';
+        final response = await http
+            .get(Uri.parse(imageUrl))
+            .timeout(
+              const Duration(seconds: 10),
+              onTimeout: () {
+                debugPrint('⏱️ HTTP indirme timeout!');
+                throw Exception('Download timeout');
+              },
+            );
+
+        final file = File(localPath);
+        await file.writeAsBytes(response.bodyBytes);
+        flashcardList[index].imagePath = localPath;
+      } catch (e) {
+        debugPrint('⚠️  $e');
+      }
     }
   }
 
@@ -117,7 +211,12 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     });
     // create image for last card
 
-    queue.add(() => createImageForEx(flashcardList.length - 1));
+    queue.add(
+      () => createImageForEx(
+        flashcardList.length - 1,
+        languageProvider.targetLanguageCode,
+      ),
+    );
 
     List<Map<String, dynamic>> partiallyEmptyExamplesWithIndex = [];
 
@@ -204,10 +303,16 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () => addEmptyFlashcard().then(
-              (value) =>
-                  queue.add(() => createImageForEx(flashcardList.length - 2)),
-            ),
+            onPressed: () => addEmptyFlashcard().then((value) {
+              if (flashcardList.length > 1) {
+                queue.add(
+                  () => createImageForEx(
+                    flashcardList.length - 2,
+                    languageProvider.targetLanguageCode,
+                  ),
+                );
+              }
+            }),
 
             style: ElevatedButton.styleFrom(
               shape: CircleBorder(),

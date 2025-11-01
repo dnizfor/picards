@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_ai/firebase_ai.dart';
+import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:picards/models/flashcard_model.dart';
 
@@ -184,19 +185,18 @@ The illustration should be easy to understand at a glance and visually convey "$
       final response = await model.generateContent(prompt);
 
       if (response.inlineDataParts.isNotEmpty) {
-        // Uygulamanın documents klasörünü bul
         final dir = await getApplicationDocumentsDirectory();
         final filePath =
             '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-        // Dosyaya yaz
         final file = File(filePath);
         await file.writeAsBytes(response.inlineDataParts.first.bytes);
         return filePath;
       } else {
-        throw Exception('Resim indirilemedi');
+        throw Exception('Image could not be downloaded');
       }
     } catch (e) {
+      debugPrint(e.toString());
       return '';
     }
   }
