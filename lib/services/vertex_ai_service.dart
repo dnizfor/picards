@@ -170,7 +170,7 @@ The illustration should be easy to understand at a glance and visually convey "$
   static Future<String> createAndDownloadImage(String word, String mean) async {
     try {
       final model = FirebaseAI.vertexAI(location: 'global').generativeModel(
-        model: 'gemini-2.5-flash-image-preview',
+        model: 'gemini-2.5-flash-image',
         generationConfig: GenerationConfig(
           responseModalities: [
             ResponseModalities.text,

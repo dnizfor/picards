@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:picards/models/deck_model.dart';
 import 'package:picards/screens/deck_detail_screen.dart';
+import 'package:picards/screens/marathon_screen.dart';
 
 class DeckCard extends StatefulWidget {
   const DeckCard({super.key, required this.deck, required this.onDismissed});
@@ -41,7 +42,14 @@ class _DeckCardState extends State<DeckCard> {
         ),
         tileColor: Theme.of(context).colorScheme.surface,
         trailing: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MarathonScreen(deck: widget.deck),
+              ),
+            );
+          },
           icon: Icon(Icons.directions_run),
           iconSize: 30,
         ),

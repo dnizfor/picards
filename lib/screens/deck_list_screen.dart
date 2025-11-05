@@ -19,6 +19,7 @@ class DeckListScreen extends StatefulWidget {
 
 class _DeckListScreenState extends State<DeckListScreen> {
   late List<Deck> deckList = [];
+  bool isMarathonLoading = false;
 
   Future<void> loadAllDecks() async {
     final dbDeckList = await DatabaseService.getAllDecks();
@@ -36,7 +37,6 @@ class _DeckListScreenState extends State<DeckListScreen> {
   @override
   Widget build(BuildContext context) {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 10, 20, 10),

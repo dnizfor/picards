@@ -15,10 +15,11 @@ class FeedProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedDeckId(int newSelectedDeckId) {
+  void setSelectedDeckId(int newSelectedDeckId) async {
     selectedDeckId = newSelectedDeckId;
     notifyListeners();
-    updateFlashCardList();
+    await updateFlashCardList();
+    return;
   }
 
   Future<void> updateDeckList() async {
@@ -29,7 +30,7 @@ class FeedProvider extends ChangeNotifier {
         updatedDeckList.isNotEmpty) {
       setSelectedDeckId(updatedDeckList[0].id!);
     }
-    updateFlashCardList();
+    await updateFlashCardList();
   }
 
   Future<void> updateFlashCardList() async {
