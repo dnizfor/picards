@@ -47,37 +47,32 @@ class _MarathonScreenState extends State<MarathonScreen> {
   }
 
   void passPractice() {
-    // switch (practiceType) {
-    //   case PracticeType.flashcard:
-    //     setState(() {
-    //       practiceType = PracticeType.translate;
-    //     });
-    //     break;
-    //   case PracticeType.translate:
-    //     setState(() {
-    //       practiceType = PracticeType.wordByImage;
-    //     });
-    //     break;
+    switch (practiceType) {
+      case PracticeType.flashcard:
+        setState(() {
+          practiceType = PracticeType.translate;
+        });
+        break;
+      case PracticeType.translate:
+        setState(() {
+          practiceType = PracticeType.wordByImage;
+        });
+        break;
 
-    //   case PracticeType.wordByImage:
-    //     setState(() {
-    //       practiceType = PracticeType.gapFilling;
-    //     });
-    //     break;
-    // case PracticeType.gapFilling:
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) => PracticeSuccessWidget(),
-    //   );
-    //   break;
-    //   default:
-    showDialog(
-      context: context,
-      builder: (context) => PracticeSuccessWidget(),
-      barrierDismissible: false,
-    );
-    // }
-    // pageController.jumpToPage(0);
+      case PracticeType.wordByImage:
+        setState(() {
+          practiceType = PracticeType.gapFilling;
+        });
+        break;
+      case PracticeType.gapFilling:
+        showDialog(
+          context: context,
+          builder: (context) => PracticeSuccessWidget(),
+        );
+        break;
+      default:
+    }
+    pageController.jumpToPage(0);
     setState(() {
       showPassButton = false;
     });
@@ -136,6 +131,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
     }
     return (flashcards.length < 3)
         ? Scaffold(
+            appBar: AppBar(),
             body: EmptyError(
               title:
                   "There are not enough words in the deck. There must be at least 3 words. Please add a word!",

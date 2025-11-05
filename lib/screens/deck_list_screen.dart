@@ -61,6 +61,9 @@ class _DeckListScreenState extends State<DeckListScreen> {
                   key: UniqueKey(),
                   deck: deckList[index],
                   onDismissed: () {
+                    setState(() {
+                      deckList.remove(deckList[index]);
+                    });
                     DatabaseService.deleteDeckById(deckList[index].id!);
                     feedProvider.updateDeckList();
                   },

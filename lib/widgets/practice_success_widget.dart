@@ -26,38 +26,41 @@ class _PracticeSuccessWidgetState extends State<PracticeSuccessWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => DeckListScreen()),
-          (route) => false, // tüm öncekileri siler
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => DeckListScreen()),
+            (route) => false, // tüm öncekileri siler
+          ),
+          shape: const CircleBorder(),
+          child: const Icon(
+            Ionicons.chevron_forward,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
-        shape: const CircleBorder(),
-        child: const Icon(
-          Ionicons.chevron_forward,
-          color: Colors.white,
-          size: 30,
-        ),
-      ),
-      body: SizedBox.expand(
-        child: Container(
-          color: Theme.of(context).colorScheme.shadow,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                'assets/lotties/trophy.json',
-                fit: BoxFit.cover,
-                width: 400,
-                repeat: false,
-              ),
-              Text(
-                'Mission Successful',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ],
+        body: SizedBox.expand(
+          child: Container(
+            color: Theme.of(context).colorScheme.shadow,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'assets/lotties/trophy.json',
+                  fit: BoxFit.cover,
+                  width: 400,
+                  repeat: false,
+                ),
+                Text(
+                  'Mission Successful',
+                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),
