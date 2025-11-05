@@ -28,7 +28,7 @@ class _DeckCardState extends State<DeckCard> {
       ),
       child: ListTile(
         leading: Icon(
-          Ionicons.checkmark,
+          Ionicons.egg_outline,
           size: 40,
           color: Theme.of(context).colorScheme.primary,
         ),
