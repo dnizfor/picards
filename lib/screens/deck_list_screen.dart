@@ -5,6 +5,7 @@ import 'package:picards/models/deck_model.dart';
 import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/screens/deck_detail_screen.dart';
 import 'package:picards/services/database_service.dart';
+import 'package:picards/widgets/draw_card_button.dart';
 import 'package:picards/widgets/story_time_button.dart';
 
 import 'package:picards/widgets/deck_card.dart';
@@ -43,6 +44,8 @@ class _DeckListScreenState extends State<DeckListScreen> {
         child: Column(
           children: [
             StoryTimeButton(),
+            SizedBox(height: 15),
+            DrawCardButton(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Row(
