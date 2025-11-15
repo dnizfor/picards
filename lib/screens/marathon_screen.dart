@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:picards/models/deck_model.dart';
 import 'package:picards/models/flashcard_model.dart';
+import 'package:picards/navigation.dart';
 import 'package:picards/services/database_service.dart';
 import 'package:picards/utils/enums/practice_type_enum.dart';
 import 'package:picards/utils/utils.dart';
@@ -129,37 +130,52 @@ class _MarathonScreenState extends State<MarathonScreen> {
         ),
       );
     }
-    return (flashcards.length < 3)
-        ? Scaffold(
-            appBar: AppBar(),
-            body: EmptyError(
-              title:
-                  "There are not enough words in the deck. There must be at least 3 words. Please add a word!",
-            ),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: LinearPercentIndicator(
-                animation: true,
-                animationDuration: 1000,
-                animateFromLastPercent: true,
-                lineHeight: 14.0,
-                percent:
-                    (currentPageIndex + 1) /
-                    (flashcards.isNotEmpty ? flashcards.length : 1),
-                backgroundColor: Colors.grey,
-                barRadius: Radius.circular(15),
-                progressColor: Theme.of(context).colorScheme.primary,
-                trailing: Icon(
-                  Ionicons.heart,
-                  color: getIconColor(practiceType),
-                ),
-              ),
-            ),
-            floatingActionButton: currentPageIndex == flashcards.length - 1
-                ? (practiceType == PracticeType.flashcard
+    if (flashcards.length < 3) {
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Navigation()),
+          );
+        }
+      });
+
+      return Scaffold(
+        body: EmptyError(
+          title:
+              "There are not enough words in the deck. There must be at least 3 words. Please add a word!",
+        ),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: LinearPercentIndicator(
+          animation: true,
+          animationDuration: 1000,
+          animateFromLastPercent: true,
+          lineHeight: 14.0,
+          percent:
+              (currentPageIndex + 1) /
+              (flashcards.isNotEmpty ? flashcards.length : 1),
+          backgroundColor: Colors.grey,
+          barRadius: Radius.circular(15),
+          progressColor: Theme.of(context).colorScheme.primary,
+          trailing: Icon(Ionicons.heart, color: getIconColor(practiceType)),
+        ),
+      ),
+      floatingActionButton: currentPageIndex == flashcards.length - 1
+          ? (practiceType == PracticeType.flashcard
+                ? FloatingActionButton(
+                    onPressed: passPractice,
+                    shape: const CircleBorder(),
+                    child: const Icon(
+                      Ionicons.chevron_forward,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  )
+                : (showPassButton
                       ? FloatingActionButton(
                           onPressed: passPractice,
                           shape: const CircleBorder(),
@@ -169,71 +185,61 @@ class _MarathonScreenState extends State<MarathonScreen> {
                             size: 30,
                           ),
                         )
-                      : (showPassButton
-                            ? FloatingActionButton(
-                                onPressed: passPractice,
-                                shape: const CircleBorder(),
-                                child: const Icon(
-                                  Ionicons.chevron_forward,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                              )
-                            : SizedBox()))
-                : SizedBox(),
-            body: Padding(
-              padding: EdgeInsetsGeometry.all(20),
-              child: PageView.builder(
-                physics: practiceType != PracticeType.flashcard
-                    ? NeverScrollableScrollPhysics()
-                    : AlwaysScrollableScrollPhysics(),
-                controller: pageController,
-                onPageChanged: (index) => setState(() {
-                  currentPageIndex = index;
-                }),
-                itemBuilder: (context, index) {
-                  final Flashcard card = flashcards[index];
-                  if (practiceType == PracticeType.flashcard) {
-                    return FlashcardContainer(
-                      word: card.word!,
-                      mean: card.mean!,
-                      example: card.example!,
-                      exampleMean: card.exampleMean!,
-                      imagePath: card.imagePath!,
-                    );
-                  } else if (practiceType == PracticeType.translate) {
-                    return SurveyCard(
-                      title: card.word!,
-                      answer: card.mean!,
-                      goToNextPage: () => goToNextPage(flashcards.length),
-                      options: getOptions(card.mean!, "mean"),
-                    );
-                  } else if (practiceType == PracticeType.wordByImage) {
-                    return ImageTestCard(
-                      goToNextPage: () => goToNextPage(flashcards.length),
-                      imagePath: card.imagePath!,
-                      options: getOptions(card.word!, "word"),
-                    );
-                  } else if (practiceType == PracticeType.gapFilling) {
-                    return GapFillingCard(
-                      word: card.word!,
-                      answer: card.word!,
-                      goToNextPage: () => goToNextPage(flashcards.length),
-                      options: getOptions(card.word!, "word"),
-                    );
-                  } else if (practiceType == PracticeType.dialog) {
-                    return ChatCard(
-                      word: card.word!,
-                      goToNextPage: () => goToNextPage(flashcards.length),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-                itemCount: flashcards.length,
-                scrollDirection: Axis.vertical,
-              ),
-            ),
-          );
+                      : SizedBox()))
+          : SizedBox(),
+      body: Padding(
+        padding: EdgeInsetsGeometry.all(20),
+        child: PageView.builder(
+          physics: practiceType != PracticeType.flashcard
+              ? NeverScrollableScrollPhysics()
+              : AlwaysScrollableScrollPhysics(),
+          controller: pageController,
+          onPageChanged: (index) => setState(() {
+            currentPageIndex = index;
+          }),
+          itemBuilder: (context, index) {
+            final Flashcard card = flashcards[index];
+            if (practiceType == PracticeType.flashcard) {
+              return FlashcardContainer(
+                word: card.word!,
+                mean: card.mean!,
+                example: card.example!,
+                exampleMean: card.exampleMean!,
+                imagePath: card.imagePath!,
+              );
+            } else if (practiceType == PracticeType.translate) {
+              return SurveyCard(
+                title: card.word!,
+                answer: card.mean!,
+                goToNextPage: () => goToNextPage(flashcards.length),
+                options: getOptions(card.mean!, "mean"),
+              );
+            } else if (practiceType == PracticeType.wordByImage) {
+              return ImageTestCard(
+                goToNextPage: () => goToNextPage(flashcards.length),
+                imagePath: card.imagePath!,
+                options: getOptions(card.word!, "word"),
+              );
+            } else if (practiceType == PracticeType.gapFilling) {
+              return GapFillingCard(
+                word: card.word!,
+                answer: card.word!,
+                goToNextPage: () => goToNextPage(flashcards.length),
+                options: getOptions(card.word!, "word"),
+              );
+            } else if (practiceType == PracticeType.dialog) {
+              return ChatCard(
+                word: card.word!,
+                goToNextPage: () => goToNextPage(flashcards.length),
+              );
+            } else {
+              return Container();
+            }
+          },
+          itemCount: flashcards.length,
+          scrollDirection: Axis.vertical,
+        ),
+      ),
+    );
   }
 }
