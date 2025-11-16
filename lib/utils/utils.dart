@@ -1,5 +1,6 @@
 import 'dart:math';
-
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:picards/models/flashcard_model.dart';
 
 class Utils {
@@ -203,5 +204,37 @@ class Utils {
         .where((s) => s.isNotEmpty)
         .toList();
     return sentences;
+  }
+
+  static Future<List<Map<String, dynamic>>> getRandomWords(
+    int count, {
+    List<String>? levels,
+  }) async {
+    // JSON dosyasını string olarak oku
+    final String jsonString = await rootBundle.loadString(
+      'assets/jsons/wordlist.json',
+    );
+
+    // Liste haline çevir
+    final List<dynamic> jsonList = json.decode(jsonString);
+
+    // Map listesine cast et
+    final List<Map<String, dynamic>> data = jsonList
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
+
+    List<Map<String, dynamic>> filtered = levels != null
+        ? data.where((e) => levels.contains(e["level"])).toList()
+        : List.from(data);
+
+    final random = Random();
+
+    if (filtered.length <= count) {
+      filtered.shuffle(random);
+      return filtered;
+    }
+
+    filtered.shuffle(random);
+    return filtered.take(count).toList();
   }
 }

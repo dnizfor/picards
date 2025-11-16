@@ -132,7 +132,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
     }
     if (flashcards.length < 3) {
       Future.delayed(const Duration(seconds: 3), () {
-        if (mounted) {
+        if (context.mounted) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const Navigation()),
           );
