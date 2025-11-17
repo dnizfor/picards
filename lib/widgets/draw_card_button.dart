@@ -58,13 +58,11 @@ class _DrawCardButtonState extends State<DrawCardButton> {
     final futures = data.map<Future<Flashcard>>((w) async {
       final englishWord = w["word"] as String;
 
-      // Storage için kelime İngilizce
       String flashcardWord = englishWord;
       String flashcardMean = englishWord;
 
-      // Hedef dil İngilizce değilse
+      // Hedef dil İngilizce değilse çeviri
       if (languageProvider.targetLanguageCode != 'en') {
-        // word → target dil
         final translatedWord = await translator.translate(
           englishWord,
           from: 'en',
@@ -72,13 +70,15 @@ class _DrawCardButtonState extends State<DrawCardButton> {
         );
         flashcardWord = translatedWord.text;
       }
-      // mean → native dil
+
+      // Anlam → native dil
       final translatedMean = await translator.translate(
         englishWord,
         from: 'en',
         to: languageProvider.nativeLanguageCode,
       );
       flashcardMean = translatedMean.text;
+
       return Flashcard(
         word: flashcardWord,
         mean: flashcardMean,
@@ -90,12 +90,10 @@ class _DrawCardButtonState extends State<DrawCardButton> {
 
     final flashcards = await Future.wait(futures);
 
-    // 3️⃣ Firebase Storage görselleri indir (her zaman İngilizce ile)
+    // 3️⃣ Firebase Storage görselleri indir (her zaman İngilizce kelime ile)
     for (var card in flashcards) {
-      final fileName =
-          (card.word != null && languageProvider.targetLanguageCode != 'en')
-          ? data.firstWhere((w) => w["word"] == card.word)["word"].toLowerCase()
-          : card.word!.toLowerCase();
+      // 🔹 İngilizce kelimeyi data listesinden alıyoruz
+      final fileName = data[flashcards.indexOf(card)]["word"].toLowerCase();
 
       final storageRef = FirebaseStorage.instance.ref(
         "vocabulary-images/$fileName.png",
@@ -111,16 +109,18 @@ class _DrawCardButtonState extends State<DrawCardButton> {
         await file.writeAsBytes(response.bodyBytes);
 
         card.imagePath = localPath;
+        debugPrint("✅ Görsel indirildi: $localPath");
       } catch (e) {
         debugPrint("⚠️ Resim indirilemedi: $e");
       }
     }
 
     // 4️⃣ Vertex AI örnek cümle üret
-    final List<Map<String, dynamic>> requestCards = [];
-    for (int i = 0; i < flashcards.length; i++) {
-      requestCards.add({"index": i, "card": flashcards[i]});
-    }
+    final requestCards = flashcards
+        .asMap()
+        .entries
+        .map((e) => {"index": e.key, "card": e.value})
+        .toList();
 
     final response = await VertexAiService.sendRequestForExampleSentences(
       VertexAiService.generateCreateExampleSentencePropmt(
@@ -135,22 +135,6 @@ class _DrawCardButtonState extends State<DrawCardButton> {
       final i = item["index"] as int;
       String exampleText = item["example"] as String;
       String exampleMeanText = item["exampleMean"] as String;
-
-      // Hedef dil İngilizce değilse örnek cümleleri çevir
-      if (languageProvider.targetLanguageCode != 'en') {
-        final translatedExample = await translator.translate(
-          exampleText,
-          from: 'en',
-          to: languageProvider.targetLanguageCode,
-        );
-        final translatedExampleMean = await translator.translate(
-          exampleMeanText,
-          from: 'en',
-          to: languageProvider.nativeLanguageCode,
-        );
-        exampleText = translatedExample.text;
-        exampleMeanText = translatedExampleMean.text;
-      }
 
       flashcards[i].example = exampleText;
       flashcards[i].exampleMean = exampleMeanText;
