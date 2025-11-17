@@ -17,6 +17,7 @@ import 'package:picards/services/database_service.dart';
 import 'package:picards/services/vertex_ai_service.dart';
 import 'package:picards/widgets/vocabulary_card.dart';
 import 'package:provider/provider.dart';
+import 'package:translator/translator.dart';
 
 class DeckDetailScreen extends StatefulWidget {
   const DeckDetailScreen({super.key, this.deck});
@@ -68,6 +69,8 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     });
   }
 
+  final GoogleTranslator translator = GoogleTranslator();
+
   Future<void> createImageForEx(int index, String langCode) async {
     if (flashcardList.isEmpty ||
         flashcardList[index].word!.trim().isEmpty ||
@@ -78,7 +81,15 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     final Flashcard lastFlashcard = flashcardList[index];
     final String word = lastFlashcard.word!.trim();
     final String mean = lastFlashcard.mean!.trim();
-    final String fileName = '$langCode-${word.toLowerCase()}';
+    String fileName = word.toLowerCase();
+    if (langCode != 'en') {
+      final translatedWord = await translator.translate(
+        word,
+        from: langCode,
+        to: 'en',
+      );
+      fileName = translatedWord.text.trim();
+    }
     final storageRef = FirebaseStorage.instance.ref().child(
       'vocabulary-images/$fileName.png',
     );
