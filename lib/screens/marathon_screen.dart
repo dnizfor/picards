@@ -50,6 +50,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
   }
 
   void passPractice() {
+    _optionsCache.clear();
     switch (practiceType) {
       case PracticeType.flashcard:
         setState(() {

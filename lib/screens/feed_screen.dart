@@ -28,6 +28,8 @@ class _FeedScreenState extends State<FeedScreen> {
   int currentPageIndex = 0;
   bool showDrawerAnimation = false;
 
+  PracticeType? _lastPracticeType;
+
   final Map<int, List<Map<String, dynamic>>> _optionsCache = {};
 
   void goToNextPage(int listLength) {
@@ -92,6 +94,11 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     final feedProvider = Provider.of<FeedProvider>(context, listen: true);
+
+    if (_lastPracticeType != feedProvider.practiceType) {
+      _optionsCache.clear();
+      _lastPracticeType = feedProvider.practiceType;
+    }
 
     return Scaffold(
       onDrawerChanged: (isOpened) {
