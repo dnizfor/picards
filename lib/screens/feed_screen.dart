@@ -28,6 +28,8 @@ class _FeedScreenState extends State<FeedScreen> {
   int currentPageIndex = 0;
   bool showDrawerAnimation = false;
 
+  final Map<int, List<Map<String, dynamic>>> _optionsCache = {};
+
   void goToNextPage(int listLength) {
     FocusScope.of(context).unfocus();
     if (currentPageIndex == listLength - 1) {
@@ -46,11 +48,20 @@ class _FeedScreenState extends State<FeedScreen> {
 
   List<Map<String, dynamic>> getOptions(
     FeedProvider provider,
+    int index,
     String title,
     String optionField,
   ) {
+    // Eğer cache varsa direkt geri dön
+    if (_optionsCache.containsKey(index)) {
+      return _optionsCache[index]!;
+    }
+
+    // Yoksa üret, cache'e ekle ve geri dön
     final flashcards = provider.flashcardList;
     final options = Utils.createOptions(title, flashcards, optionField);
+
+    _optionsCache[index] = options;
     return options;
   }
 
@@ -150,7 +161,12 @@ class _FeedScreenState extends State<FeedScreen> {
                           answer: card.mean!,
                           goToNextPage: () =>
                               goToNextPage(feedProvider.flashcardList.length),
-                          options: getOptions(feedProvider, card.mean!, "mean"),
+                          options: getOptions(
+                            feedProvider,
+                            index,
+                            card.mean!,
+                            "mean",
+                          ),
                         );
                       } else if (feedProvider.practiceType ==
                           PracticeType.wordByImage) {
@@ -158,7 +174,12 @@ class _FeedScreenState extends State<FeedScreen> {
                           goToNextPage: () =>
                               goToNextPage(feedProvider.flashcardList.length),
                           imagePath: card.imagePath!,
-                          options: getOptions(feedProvider, card.word!, "word"),
+                          options: getOptions(
+                            feedProvider,
+                            index,
+                            card.word!,
+                            "word",
+                          ),
                         );
                       } else if (feedProvider.practiceType ==
                           PracticeType.gapFilling) {
@@ -167,7 +188,12 @@ class _FeedScreenState extends State<FeedScreen> {
                           answer: card.word!,
                           goToNextPage: () =>
                               goToNextPage(feedProvider.flashcardList.length),
-                          options: getOptions(feedProvider, card.word!, "word"),
+                          options: getOptions(
+                            feedProvider,
+                            index,
+                            card.word!,
+                            "word",
+                          ),
                         );
                       } else if (feedProvider.practiceType ==
                           PracticeType.dialog) {

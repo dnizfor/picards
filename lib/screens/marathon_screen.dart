@@ -32,6 +32,8 @@ class _MarathonScreenState extends State<MarathonScreen> {
   bool showPassButton = false;
   bool loading = true;
 
+  final Map<int, List<Map<String, dynamic>>> _optionsCache = {};
+
   Color getIconColor(PracticeType practiceTyp) {
     switch (practiceTyp) {
       case PracticeType.flashcard:
@@ -93,8 +95,18 @@ class _MarathonScreenState extends State<MarathonScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  List<Map<String, dynamic>> getOptions(String title, String optionField) {
+  List<Map<String, dynamic>> getOptions(
+    String title,
+    String optionField,
+    int index,
+  ) {
+    if (_optionsCache.containsKey(index)) {
+      return _optionsCache[index]!;
+    }
+
     final options = Utils.createOptions(title, flashcards, optionField);
+    _optionsCache[index] = options;
+
     return options;
   }
 
@@ -212,20 +224,20 @@ class _MarathonScreenState extends State<MarathonScreen> {
                 title: card.word!,
                 answer: card.mean!,
                 goToNextPage: () => goToNextPage(flashcards.length),
-                options: getOptions(card.mean!, "mean"),
+                options: getOptions(card.mean!, "mean", index),
               );
             } else if (practiceType == PracticeType.wordByImage) {
               return ImageTestCard(
                 goToNextPage: () => goToNextPage(flashcards.length),
                 imagePath: card.imagePath!,
-                options: getOptions(card.word!, "word"),
+                options: getOptions(card.word!, "word", index),
               );
             } else if (practiceType == PracticeType.gapFilling) {
               return GapFillingCard(
                 word: card.word!,
                 answer: card.word!,
                 goToNextPage: () => goToNextPage(flashcards.length),
-                options: getOptions(card.word!, "word"),
+                options: getOptions(card.word!, "word", index),
               );
             } else if (practiceType == PracticeType.dialog) {
               return ChatCard(
