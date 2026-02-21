@@ -35,36 +35,41 @@ class _FlashcardContainerState extends State<FlashcardContainer> {
         child: Column(
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(15),
-                  child: Image.file(File(widget.imagePath), fit: BoxFit.cover),
-                ),
                 Text(
                   widget.word,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.mean,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey,
                   ),
                 ),
+                SizedBox(height: 20),
+                ClipRRect(
+                  borderRadius: BorderRadiusGeometry.circular(15),
+                  child: Image.file(File(widget.imagePath), fit: BoxFit.cover),
+                ),
               ],
             ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
                     children: [
                       Text(
                         widget.example,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -73,7 +78,7 @@ class _FlashcardContainerState extends State<FlashcardContainer> {
                       SizedBox(height: 10),
                       Text(
                         widget.exampleMean,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
