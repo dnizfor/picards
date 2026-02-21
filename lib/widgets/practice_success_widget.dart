@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
-import 'package:picards/screens/deck_list_screen.dart';
+import 'package:picards/navigation.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class PracticeSuccessWidget extends StatefulWidget {
@@ -32,7 +32,7 @@ class _PracticeSuccessWidgetState extends State<PracticeSuccessWidget> {
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => DeckListScreen()),
+            MaterialPageRoute(builder: (context) => Navigation()),
             (route) => false, // tüm öncekileri siler
           ),
           shape: const CircleBorder(),
