@@ -9,6 +9,7 @@
   <img src="https://github.com/user-attachments/assets/910046b1-1c33-439e-880a-47737a64c359" width="220"/>
   <img src="https://github.com/user-attachments/assets/4d10d4c4-27a5-49bd-92b4-dbed168e415f" width="220"/>
 </p>
+
 # Picards AI
 
 > Build a vocabulary deck once. Practice it in five different ways.
