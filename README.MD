@@ -1,3 +1,14 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/116c95b6-903d-4cf5-bf86-f59983819a76" width="220"/>
+  <img src="https://github.com/user-attachments/assets/5bc19256-f1ce-4415-b27c-9491a91dd812" width="220"/>
+  <img src="https://github.com/user-attachments/assets/bb6d1051-f04e-4d07-802c-500b425387d0" width="220"/>
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ee9181a5-2f1b-4832-8471-cb8416b5558c" width="220"/>
+  <img src="https://github.com/user-attachments/assets/910046b1-1c33-439e-880a-47737a64c359" width="220"/>
+  <img src="https://github.com/user-attachments/assets/4d10d4c4-27a5-49bd-92b4-dbed168e415f" width="220"/>
+</p>
 # Picards AI
 
 > Build a vocabulary deck once. Practice it in five different ways.
