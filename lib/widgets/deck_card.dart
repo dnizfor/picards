@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:picards/models/deck_model.dart';
 import 'package:picards/screens/deck_detail_screen.dart';
 import 'package:picards/screens/marathon_screen.dart';
@@ -28,7 +27,7 @@ class _DeckCardState extends State<DeckCard> {
       ),
       child: ListTile(
         leading: Icon(
-          Ionicons.egg_outline,
+          Icons.egg_outlined,
           size: 40,
           color: Theme.of(context).colorScheme.primary,
         ),

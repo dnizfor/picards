@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:picards/models/deck_model.dart';
@@ -174,7 +173,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
           backgroundColor: Colors.grey,
           barRadius: Radius.circular(15),
           progressColor: Theme.of(context).colorScheme.primary,
-          trailing: Icon(Ionicons.heart, color: getIconColor(practiceType)),
+          trailing: Icon(Icons.favorite, color: getIconColor(practiceType)),
         ),
       ),
       floatingActionButton: currentPageIndex == flashcards.length - 1
@@ -183,7 +182,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                     onPressed: passPractice,
                     shape: const CircleBorder(),
                     child: const Icon(
-                      Ionicons.chevron_forward,
+                      Icons.chevron_right,
                       color: Colors.white,
                       size: 30,
                     ),
@@ -193,7 +192,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                           onPressed: passPractice,
                           shape: const CircleBorder(),
                           child: const Icon(
-                            Ionicons.chevron_forward,
+                            Icons.chevron_right,
                             color: Colors.white,
                             size: 30,
                           ),

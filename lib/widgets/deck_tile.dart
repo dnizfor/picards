@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 
 class DeckTile extends StatelessWidget {
   final String value;
@@ -27,7 +26,7 @@ class DeckTile extends StatelessWidget {
         ),
       ),
       leading: Icon(
-        isSelected ? Ionicons.egg : Ionicons.egg_outline,
+        isSelected ? Icons.egg : Icons.egg_outlined,
         color: isSelected ? Theme.of(context).colorScheme.primary : null,
       ),
       onTap: () => onTap(value),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:picards/navigation.dart';
 import 'package:picards/providers/language_provider.dart';
 import 'package:picards/utils/utils.dart';
@@ -88,11 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 selectedLanguageCode = '';
               },
               shape: CircleBorder(),
-              child: Icon(
-                Ionicons.chevron_forward,
-                color: Colors.white,
-                size: 30,
-              ),
+              child: Icon(Icons.chevron_right, color: Colors.white, size: 30),
             ),
       appBar: AppBar(
         backgroundColor: Color(0xFF121212),
@@ -131,6 +126,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               SizedBox(height: 20),
               Expanded(
                 child: ListView.separated(
+                  key: ValueKey(step),
                   itemCount: languages.length,
                   itemBuilder: (builderContext, index) {
                     return LanguageCard(

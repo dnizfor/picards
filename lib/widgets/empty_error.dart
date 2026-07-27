@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 
 class EmptyError extends StatefulWidget {
   const EmptyError({super.key, required this.title});
@@ -19,7 +18,7 @@ class _EmptyErrorState extends State<EmptyError> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Ionicons.sad, size: 150, color: Colors.grey),
+            Icon(Icons.sentiment_dissatisfied, size: 150, color: Colors.grey),
             SizedBox(height: 10),
             Text(
               widget.title,

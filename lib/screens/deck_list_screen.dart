@@ -24,6 +24,7 @@ class _DeckListScreenState extends State<DeckListScreen> {
 
   Future<void> loadAllDecks() async {
     final dbDeckList = await DatabaseService.getAllDecks();
+    if (!mounted) return;
     setState(() {
       deckList = dbDeckList;
     });
@@ -57,17 +58,25 @@ class _DeckListScreenState extends State<DeckListScreen> {
 
             Expanded(
               child: ListView.separated(
-                itemBuilder: (context, index) => DeckCard(
-                  key: UniqueKey(),
-                  deck: deckList[index],
-                  onDismissed: () {
-                    setState(() {
-                      deckList.remove(deckList[index]);
-                    });
-                    DatabaseService.deleteDeckById(deckList[index].id!);
-                    feedProvider.updateDeckList();
-                  },
-                ),
+                itemBuilder: (context, index) {
+                  final deck = deckList[index];
+
+                  return DeckCard(
+                    key: ValueKey(deck.id),
+                    deck: deck,
+                    onDismissed: () async {
+                      final deckId = deck.id;
+                      if (deckId == null) return;
+
+                      setState(() {
+                        deckList.removeWhere((item) => item.id == deckId);
+                      });
+
+                      await DatabaseService.deleteDeckById(deckId);
+                      await feedProvider.updateDeckList();
+                    },
+                  );
+                },
                 itemCount: deckList.length,
                 separatorBuilder: (context, index) => SizedBox(height: 10),
               ),

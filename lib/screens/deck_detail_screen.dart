@@ -134,24 +134,6 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
           return;
         }
 
-        // 🧩 Firebase Storage’a yükle
-        await storageRef
-            .putFile(file)
-            .timeout(
-              const Duration(seconds: 20),
-              onTimeout: () {
-                debugPrint('⏱️ putFile zaman aşımına uğradı!');
-                throw Exception('Upload timeout');
-              },
-            );
-
-        imageUrl = await storageRef.getDownloadURL().timeout(
-          const Duration(seconds: 10),
-          onTimeout: () {
-            throw Exception('URL fetch timeout');
-          },
-        );
-
         flashcardList[index].imagePath = imagePath;
       } catch (e) {
         debugPrint('⚠️ $e');

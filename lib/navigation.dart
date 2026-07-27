@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:picards/screens/deck_list_screen.dart';
 import 'package:picards/screens/feed_screen.dart';
 import 'package:picards/screens/config_screen.dart';
@@ -26,8 +25,11 @@ class _NavigationState extends State<Navigation> {
         currentIndex: _currenIndex,
         onTap: (int newIndex) => setState(() => _currenIndex = newIndex),
         items: [
-          BottomNavigationBarItem(icon: Icon(Ionicons.copy), label: 'home'),
-          BottomNavigationBarItem(icon: Icon(Ionicons.flame), label: 'profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.copy), label: 'home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_fire_department),
+            label: 'profile',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
         ],
       ),

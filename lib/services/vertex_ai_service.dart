@@ -7,6 +7,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:picards/models/flashcard_model.dart';
 
 class VertexAiService {
+  static const String _textModel = 'gemini-2.5-flash-lite';
+  static const String _imageModel = 'gemini-2.5-flash-lite';
+
   static final jsonSchemaForExampleSentences = Schema.object(
     properties: {
       'examples': Schema.array(
@@ -38,7 +41,7 @@ class VertexAiService {
 
   static Future<String> sendRequestForExampleSentences(String newPrompt) async {
     final model = FirebaseAI.vertexAI().generativeModel(
-      model: 'gemini-2.0-flash-lite-001',
+      model: _textModel,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',
         responseSchema: jsonSchemaForExampleSentences,
@@ -60,7 +63,7 @@ class VertexAiService {
     String word,
   ) async {
     final model = FirebaseAI.vertexAI().generativeModel(
-      model: 'gemini-2.0-flash-lite-001',
+      model: _textModel,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',
         responseSchema: jsonSchemaForQuestion,
@@ -87,7 +90,7 @@ class VertexAiService {
     String word,
   ) async {
     final model = FirebaseAI.vertexAI().generativeModel(
-      model: 'gemini-2.0-flash-lite-001',
+      model: _textModel,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',
         responseSchema: jsonSchemaForUserAnswer,
@@ -116,7 +119,7 @@ class VertexAiService {
   );
   static Future<String> sendRequestForGapFillingText(String newPrompt) async {
     final model = FirebaseAI.vertexAI().generativeModel(
-      model: 'gemini-2.0-flash-lite-001',
+      model: _textModel,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',
         responseSchema: jsonSchemaForGapFillingText,
@@ -143,7 +146,7 @@ class VertexAiService {
   );
   static Future<String> sendRequestForCreateStory(String newPrompt) async {
     final model = FirebaseAI.vertexAI().generativeModel(
-      model: 'gemini-2.0-flash-lite-001',
+      model: _textModel,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',
         responseSchema: jsonSchemaForCreateStory,
@@ -170,7 +173,7 @@ The illustration should be easy to understand at a glance and visually convey "$
   static Future<String> createAndDownloadImage(String word, String mean) async {
     try {
       final model = FirebaseAI.vertexAI(location: 'global').generativeModel(
-        model: 'gemini-2.5-flash-image',
+        model: _imageModel,
         generationConfig: GenerationConfig(
           responseModalities: [
             ResponseModalities.text,

@@ -3,7 +3,6 @@ import 'package:picards/providers/feed_provider.dart';
 import 'package:picards/utils/enums/practice_type_enum.dart';
 import 'package:picards/widgets/deck_tile.dart';
 import 'package:picards/widgets/practice_tile.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
 class FeedScreenDrawer extends StatefulWidget {
@@ -37,7 +36,7 @@ class _FeedScreenDrawerState extends State<FeedScreenDrawer> {
           PracticeTile(
             value: 'flashcard',
             label: 'Flashcard',
-            icon: Ionicons.albums,
+            icon: Icons.collections_bookmark,
             isSelected: feedProvider.practiceType == PracticeType.flashcard,
             onTap: (value) {
               feedProvider.setPracticeType(PracticeType.flashcard);
@@ -46,7 +45,7 @@ class _FeedScreenDrawerState extends State<FeedScreenDrawer> {
           PracticeTile(
             value: 'translate',
             label: 'Translate',
-            icon: Ionicons.language,
+            icon: Icons.language,
             isSelected: feedProvider.practiceType == PracticeType.translate,
             onTap: (value) {
               feedProvider.setPracticeType(PracticeType.translate);
@@ -55,7 +54,7 @@ class _FeedScreenDrawerState extends State<FeedScreenDrawer> {
           PracticeTile(
             value: 'image',
             label: 'Image',
-            icon: Ionicons.image,
+            icon: Icons.image,
             isSelected: feedProvider.practiceType == PracticeType.wordByImage,
             onTap: (value) {
               feedProvider.setPracticeType(PracticeType.wordByImage);
@@ -64,7 +63,7 @@ class _FeedScreenDrawerState extends State<FeedScreenDrawer> {
           PracticeTile(
             value: 'gap_filling',
             label: 'Gap filling',
-            icon: Ionicons.git_commit,
+            icon: Icons.space_bar,
             isSelected: feedProvider.practiceType == PracticeType.gapFilling,
             onTap: (value) {
               feedProvider.setPracticeType(PracticeType.gapFilling);
@@ -73,7 +72,7 @@ class _FeedScreenDrawerState extends State<FeedScreenDrawer> {
           PracticeTile(
             value: 'dialog',
             label: 'Dialog',
-            icon: Ionicons.chatbubbles,
+            icon: Icons.forum,
             isSelected: feedProvider.practiceType == PracticeType.dialog,
             onTap: (value) {
               feedProvider.setPracticeType(PracticeType.dialog);

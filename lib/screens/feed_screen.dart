@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:picards/models/flashcard_model.dart';
 import 'package:picards/providers/feed_provider.dart';
@@ -125,7 +124,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 backgroundColor: Colors.grey,
                 barRadius: Radius.circular(15),
                 progressColor: Theme.of(context).colorScheme.primary,
-                trailing: Icon(Ionicons.heart),
+                trailing: Icon(Icons.favorite),
               ),
             )
           : AppBar(automaticallyImplyLeading: false),

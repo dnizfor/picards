@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:picards/navigation.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -36,11 +35,7 @@ class _PracticeSuccessWidgetState extends State<PracticeSuccessWidget> {
             (route) => false, // tüm öncekileri siler
           ),
           shape: const CircleBorder(),
-          child: const Icon(
-            Ionicons.chevron_forward,
-            color: Colors.white,
-            size: 30,
-          ),
+          child: const Icon(Icons.chevron_right, color: Colors.white, size: 30),
         ),
         body: SizedBox.expand(
           child: Container(
