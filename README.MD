@@ -10,7 +10,8 @@
   <img src="https://github.com/user-attachments/assets/4d10d4c4-27a5-49bd-92b4-dbed168e415f" width="220"/>
 </p>
 
-# Picards AI
+
+# Picards AI - Ai Vocabulary Flashcards
 
 > Build a vocabulary deck once. Practice it in five different ways.
 
